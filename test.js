@@ -1,5 +1,4 @@
 (function(ext) {
-    // Cleanup function when the extension is unloaded
     ext._shutdown = function() {};
 
     // Status reporting code
@@ -8,15 +7,12 @@
         return {status: 2, msg: 'Ready'};
     };
 
-    ext.get_temp = function(location, callback) {
-        // Make an AJAX call to the Open Weather Maps API
-        $.ajax({
-              url: 'http://api.openweathermap.org/data/2.5/weather?q='+location+'&units=imperial',
-              dataType: 'jsonp',
-              success: function( weather_data ) {
-                  // Got the data - parse it and return the temperature
-                  temperature = weather_data['main']['temp'];
-                  callback(temperature);
+    ext.get_temp = function(callback) {
+       $.ajax({
+              url: 'https://api.particle.io/v1/devices/22003f000747343232363230/sensorvalue?access_token=c3a30c3f90a8389756271293cbf2168e40b3b1c8',
+              dataType: 'json',
+              success: function( sensor_data ) { debugger;
+                callback(sensor_data["result"])
               }
         });
     };
@@ -24,10 +20,10 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['R', 'current temperature in city %s', 'get_temp', 'Boston, MA'],
+            ['R', 'current sensor values'],
         ]
     };
 
     // Register the extension
-    ScratchExtensions.register('Weather extension', descriptor, ext);
+    ScratchExtensions.register('sensor test extension', descriptor, ext);
 })({});
