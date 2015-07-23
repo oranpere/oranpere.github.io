@@ -1,4 +1,5 @@
 (function(ext) {
+    // Cleanup function when the extension is unloaded
     ext._shutdown = function() {};
 
     // Status reporting code
@@ -20,7 +21,7 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['R', 'current sensor values'],
+            ['R', 'current sensor values', 'get_temp'],
         ]
     };
 
