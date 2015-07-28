@@ -8,9 +8,9 @@
         return {status: 2, msg: 'Ready'};
     };
 
-    ext.get_temp = function(callback) {
+    ext.get_btn_status = function(callback) {
        $.ajax({
-              url: 'https://api.particle.io/v1/devices/22003f000747343232363230/sensorvalue?access_token=c3a30c3f90a8389756271293cbf2168e40b3b1c8',
+              url: 'https://api.particle.io/v1/devices/53ff6e066667574818232067/isclicked?access_token=4007a7e4e0dfa5f11e7777101f4ff245e631dcc0',
               dataType: 'json',
               success: function( sensor_data ) { debugger;
                 callback(sensor_data["result"])
@@ -21,10 +21,10 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['R', 'current sensor values', 'get_temp'],
-        ]
+            ['R', 'current button status', 'get_btn_status'],
+        ]   
     };
 
     // Register the extension
-    ScratchExtensions.register('sensor test extension', descriptor, ext);
+    ScratchExtensions.register('button statues', descriptor, ext);
 })({});
