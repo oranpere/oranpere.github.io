@@ -6,6 +6,7 @@ int changeLedState(String command);
 int lightIntensity = 0;
 
 UDP Udp;
+const int localPort = 8888;
 
 void setup(){
   Spark.variable("isclicked", &isClicked, INT);
@@ -17,10 +18,6 @@ void setup(){
   pinMode(lightResPin,INPUT);
 
   Udp.begin(localPort);
-
-   // Print your device IP Address via serial
-   Serial.begin(9600);
-   Serial.println(WiFi.localIP());
 }
 
 void loop(){
@@ -31,7 +28,7 @@ void loop(){
     isClicked = 0;
   delay(100);
 
-  Udp.beginPacket(ipAddress, port);
+  Udp.beginPacket("192.168.43.132", 3333);
   Udp.write(c);
   Udp.endPacket();
 }
