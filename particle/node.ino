@@ -5,6 +5,8 @@ int isClicked = 1;
 int changeLedState(String command);
 int lightIntensity = 0;
 
+UDP Udp;
+
 void setup(){
   Spark.variable("isclicked", &isClicked, INT);
   Spark.variable("lightval", &lightIntensity, INT);
@@ -13,6 +15,12 @@ void setup(){
   pinMode(btn1Pin, INPUT_PULLUP);
   pinMode(ledPin,OUTPUT);
   pinMode(lightResPin,INPUT);
+
+  Udp.begin(localPort);
+
+   // Print your device IP Address via serial
+   Serial.begin(9600);
+   Serial.println(WiFi.localIP());
 }
 
 void loop(){
@@ -21,6 +29,11 @@ void loop(){
     isClicked = 1;
   else
     isClicked = 0;
+  delay(100);
+
+  Udp.beginPacket(ipAddress, port);
+  Udp.write(c);
+  Udp.endPacket();
 }
 
 bool checkClick(int pin){

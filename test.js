@@ -33,18 +33,12 @@
         }
 
     ext.set_led_off = function(callback) {
-        $.ajax(buildChangeLedRequest("off")).done(function (response) {
-           if(response.return_value == 1)
-              callback("turned off led");
-        });        
+        $.ajax(buildChangeLedRequest("off"));        
      };
      
      
     ext.set_led_on = function(callback) {
-        $.ajax(buildChangeLedRequest("on")).done(function (response) {
-           if(response.return_value == 1)
-              callback("turned on led");
-        });        
+        $.ajax(buildChangeLedRequest("on"));
      };
      
       ext.get_light_level = function(callback) {
@@ -52,6 +46,7 @@
               url: 'https://api.particle.io/v1/devices/53ff6e066667574818232067/lightval?access_token=4007a7e4e0dfa5f11e7777101f4ff245e631dcc0',
               dataType: 'json',
               success: function( sensor_data ) { 
+                  map(function(lightval){return })
                 callback(sensor_data["result"])
               }
         });  
