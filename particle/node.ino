@@ -1,10 +1,15 @@
+const int btn1Pin = D0;
+const int ledPin = D7;
 
 int isClicked = 1;
-const int btn1Pin = D0;
+int changeLedState(String command);
 
 void setup(){
-  Spark.variable("sensorvalue", &isClicked, INT);
+  Spark.variable("isclicked", &isClicked, INT);
+  Spark.function("changeled",changeLedState);
+
   pinMode(btn1Pin, INPUT_PULLUP);
+  pinMode(ledPin,OUTPUT);
 }
 
 void loop(){
@@ -15,8 +20,30 @@ void loop(){
     delay(100);
 }
 
-bool checkClick(pin){
+bool checkClick(int pin){
   if(digitalRead(pin) == LOW)
     return true;
   return false;
+}
+
+int changeLedState(String command){
+    if(command == "on"){
+        turnOnLed();
+        return 1;
+    }
+
+    if(command == "off"){
+        turnOffLed();
+        return 1;
+    }
+
+    return 0;
+}
+
+void turnOnLed(){
+    digitalWrite(ledPin,HIGH);
+}
+
+void turnOffLed(){
+    digitalWrite(ledPin,LOW);
 }
