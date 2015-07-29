@@ -51,8 +51,8 @@
     var descriptor = {
         blocks: [
             ['R', 'current button status', 'get_btn_status'],
-            ['h', 'Turn off led', 'set_led_off'],
-            ['h', 'Turn on led', 'set_led_on'],
+            [' ', 'Turn off led', 'set_led_off'],
+            [' ', 'Turn on led', 'set_led_on'],
         ]   
     };
 
