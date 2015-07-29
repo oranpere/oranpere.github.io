@@ -46,7 +46,7 @@
               url: 'http://localhost:59552/',
               dataType: 'json',
               success: function( sensor_data ) { 
-                callback(sensor_data["result"])
+                callback(sensor_data)
               }
         });  
      };
