@@ -43,7 +43,7 @@
      
       ext.get_light_level = function(callback) {
          $.ajax({
-              url: 'http://localhost:8080/light.txt',
+              url: 'http://localhost:59552/',
               dataType: 'json',
               success: function( sensor_data ) { 
                   map(function(lightval){return })

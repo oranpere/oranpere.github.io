@@ -26,10 +26,11 @@ void loop(){
     isClicked = 1;
   else
     isClicked = 0;
-  delay(100);
 
   Udp.beginPacket("192.168.43.132", 3333);
-  Udp.write(c);
+  char packet[5];
+  sprintf(packet, "%d", lightIntensity);
+  Udp.write(packet);
   Udp.endPacket();
 }
 
