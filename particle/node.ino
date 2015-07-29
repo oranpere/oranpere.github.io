@@ -12,7 +12,7 @@ void setup(){
 
   pinMode(btn1Pin, INPUT_PULLUP);
   pinMode(ledPin,OUTPUT);
-  pinMode(lightResPin,INPUT)
+  pinMode(lightResPin,INPUT);
 }
 
 void loop(){
