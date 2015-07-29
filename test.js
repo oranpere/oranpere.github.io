@@ -46,7 +46,6 @@
               url: 'http://localhost:59552/',
               dataType: 'json',
               success: function( sensor_data ) { 
-                  map(function(lightval){return })
                 callback(sensor_data["result"])
               }
         });  
