@@ -60,10 +60,10 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['r', 'current button status', 'get_btn_status'],
+            ['R', 'current button status', 'get_btn_status'],
             [' ', 'Turn off led', 'set_led_off'],
             [' ', 'Turn on led', 'set_led_on'],
-            ['r', 'get light', 'get_light_level'],
+            ['R', 'get light', 'get_light_level'],
         ]   
     };
 
