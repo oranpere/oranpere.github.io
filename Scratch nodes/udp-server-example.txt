@@ -1,0 +1,19 @@
+var dgram = require("dgram");
+var fs = require('fs');
+var server = dgram.createSocket("udp4");
+server.on("message", function (msg, rinfo) {
+  console.log("server got: " + msg + " from " + rinfo.address + ":" + rinfo.port);
+
+fs.writeFile("/Users/Tertius/Desktop/Scratch nodes/light.txt", msg, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+}); 
+
+});
+server.on("listening", function () {
+  var address = server.address();
+  
+  console.log("server listening " + address.address + ":" + address.port);
+});
+server.bind(3333);
