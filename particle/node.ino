@@ -21,14 +21,35 @@ void setup(){
 }
 
 void loop(){
-  lightIntensity = analogRead(A0);
+    handleButtonClicks();
+    udpGetLedState();
+    udpSendLightIntensity();
+}
+char c;
+void udpGetLedState(){
+  if (Udp.parsePacket() > 0) {
+    c = Udp.read();
+
+    Udp.flush();
+    if(c == '1')
+      turnOnLed();
+    if(c == '0')
+      turnOffLed();
+    c='\0';
+  }
+}
+
+void handleButtonClicks(){
   if(checkClick(btn1Pin))
     isClicked = 1;
   else
     isClicked = 0;
+}
 
+char packet[5];
+void udpSendLightIntensity(){
+  lightIntensity = analogRead(A0);
   Udp.beginPacket("192.168.43.132", 3333);
-  char packet[5];
   sprintf(packet, "%d", lightIntensity);
   Udp.write(packet);
   Udp.endPacket();

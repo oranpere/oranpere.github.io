@@ -18,27 +18,25 @@
         });
     };
 
-      var buildChangeLedRequest = function(args){
-         return {
-                  "async": true,
-                  "crossDomain": true,
-                  "url": "https://api.particle.io/v1/devices/53ff6e066667574818232067/changeled",
-                  "method": "POST",
-                  "headers": {},
-                  "data": {
-                    "access_token": "4007a7e4e0dfa5f11e7777101f4ff245e631dcc0",
-                    "args": args
-                      }
-                    };
-        }
-
     ext.set_led_off = function(callback) {
-        $.ajax(buildChangeLedRequest("off"));        
+        $.ajax({
+             url: 'http://localhost:59552/led-off',
+              dataType: 'json',
+              success: function( sensor_data ) { 
+                callback(sensor_data["result"])
+              }
+        });
      };
      
      
     ext.set_led_on = function(callback) {
-        $.ajax(buildChangeLedRequest("on"));
+        $.ajax({
+              url: 'http://localhost:59552/led-on',
+              dataType: 'json',
+              success: function( sensor_data ) { 
+                callback(sensor_data["result"])
+              }
+        });
      };
      
       ext.get_light_level = function(callback) {
