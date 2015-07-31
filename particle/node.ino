@@ -3,7 +3,6 @@ const int ledPin = D7;
 const int lightResPin = A0;
 bool isClicked = false;
 int lightIntensity = 0;
-SYSTEM_MODE(SEMI_AUTOMATIC);
 
 UDP UdpLightRes;
 const int udpLightResPort = 8880;
@@ -32,13 +31,13 @@ void loop(){
 }
 
 void udpSendButtonState(){
-  UdpLightRes.beginPacket("192.168.43.132", 3334);
+  UdpButton.beginPacket("192.168.43.132", 3334);
   if(isClicked){
     UdpButton.write('1');
   }else{
     UdpButton.write('0');
   }
-  UdpLightRes.endPacket();
+  UdpButton.endPacket();
 }
 
 char c;
