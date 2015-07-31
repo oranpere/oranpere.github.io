@@ -26,7 +26,6 @@ var setupUdpServer = function(dgramSocket,port,messageHandler) {
 };
 
 var saveButtonState = function(msg){
-  console.log(msg.toString());
   buttonState = msg;
 };
 

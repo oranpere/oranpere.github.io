@@ -12,8 +12,8 @@
        $.ajax({
               url: 'http://localhost:59552/button-state',
               dataType: 'json',
-              success: function( sensor_data ) { 
-                callback(sensor_data["result"])
+              success: function( btnStatus ) { 
+                callback(btnStatus)
               }
         });
     };
@@ -23,7 +23,6 @@
              url: 'http://localhost:59552/led-off',
               dataType: 'json',
               success: function( sensor_data ) { 
-                callback(sensor_data["result"])
               }
         });
      };
@@ -34,7 +33,6 @@
               url: 'http://localhost:59552/led-on',
               dataType: 'json',
               success: function( sensor_data ) { 
-                callback(sensor_data["result"])
               }
         });
      };
