@@ -1,36 +1,52 @@
 const int btn1Pin = D0;
 const int ledPin = D7;
 const int lightResPin = A0;
-int isClicked = 1;
-int changeLedState(String command);
+bool isClicked = false;
 int lightIntensity = 0;
+SYSTEM_MODE(SEMI_AUTOMATIC);
 
-UDP Udp;
-const int localPort = 8888;
+UDP UdpLightRes;
+const int udpLightResPort = 8880;
+
+UDP UdpLed;
+const int udpLedPort = 8881;
+
+UDP UdpButton;
+const int udpButtonPort = 8882;
 
 void setup(){
-  Spark.variable("isclicked", &isClicked, INT);
-  Spark.variable("lightval", &lightIntensity, INT);
-  Spark.function("changeled",changeLedState);
-
   pinMode(btn1Pin, INPUT_PULLUP);
   pinMode(ledPin,OUTPUT);
   pinMode(lightResPin,INPUT);
 
-  Udp.begin(localPort);
+  UdpLightRes.begin(udpLightResPort);
+  UdpLed.begin(udpLedPort);
+  UdpButton.begin(udpButtonPort);
 }
 
 void loop(){
     handleButtonClicks();
     udpGetLedState();
     udpSendLightIntensity();
+    udpSendButtonState();
 }
+
+void udpSendButtonState(){
+  UdpLightRes.beginPacket("192.168.43.132", 3334);
+  if(isClicked){
+    UdpButton.write('1');
+  }else{
+    UdpButton.write('0');
+  }
+  UdpLightRes.endPacket();
+}
+
 char c;
 void udpGetLedState(){
-  if (Udp.parsePacket() > 0) {
-    c = Udp.read();
+  if (UdpLed.parsePacket() > 0) {
+    c = UdpLed.read();
 
-    Udp.flush();
+    UdpLed.flush();
     if(c == '1')
       turnOnLed();
     if(c == '0')
@@ -41,38 +57,24 @@ void udpGetLedState(){
 
 void handleButtonClicks(){
   if(checkClick(btn1Pin))
-    isClicked = 1;
+    isClicked = true;
   else
-    isClicked = 0;
+    isClicked = false;
 }
 
 char packet[5];
 void udpSendLightIntensity(){
   lightIntensity = analogRead(A0);
-  Udp.beginPacket("192.168.43.132", 3333);
+  UdpLightRes.beginPacket("192.168.43.132", 3333);
   sprintf(packet, "%d", lightIntensity);
-  Udp.write(packet);
-  Udp.endPacket();
+  UdpLightRes.write(packet);
+  UdpLightRes.endPacket();
 }
 
 bool checkClick(int pin){
   if(digitalRead(pin) == LOW)
     return true;
   return false;
-}
-
-int changeLedState(String command){
-    if(command == "on"){
-        turnOnLed();
-        return 1;
-    }
-
-    if(command == "off"){
-        turnOffLed();
-        return 1;
-    }
-
-    return 0;
 }
 
 void turnOnLed(){
