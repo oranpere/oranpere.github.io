@@ -27,8 +27,15 @@ var server = express();
 var cors = require('cors');
 server.use(cors());
 
+
+server.use(express.static('public'));
+
 server.get('/', function (req, res) {
   res.send(lightlevel.toString());
+});
+
+server.get('/mobile', function (req, res) {
+  res.sendfile('./index.html');
 });
 
 server.get('/button-state', function (req, res) {
