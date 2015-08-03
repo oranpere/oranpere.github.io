@@ -2,15 +2,15 @@
     var socket;
     socketInit(); 
     
-     function socketInit(){
+    function socketInit(){
         socket = new WebSocket("ws://localhost:8080");
         socket.onmessage = onMessageHandler;
     }
     
-    var onMessageHandler = function (event) {
-    var msg; 
+   function onMessageHandler (event) {
+      var msg; 
       try{
-           msg= JSON.parse(event.data);
+           msg = JSON.parse(event.data);
            switch(msg.type) {
              case "light-level":
              if (ext.ligt_level_callback)
@@ -54,10 +54,15 @@
         sendMessage(msg);
      };
      
-      ext.get_light_level = function(callback) {
+     ext.get_light_level = function(callback) {
          var msg = { 'type':'get-light-level' };
         sendMessage(msg);
          ext.ligt_level_callback = callback;
+     };
+     
+     ext.play_drum = function(callback) {
+        var msg = { 'type':'play-drum' };
+        sendMessage(msg);
      };
 
     // Block and block menu descriptions
@@ -66,6 +71,7 @@
             ['R', 'current button status', 'get_btn_status'],
             [' ', 'Turn off led', 'set_led_off'],
             [' ', 'Turn on led', 'set_led_on'],
+            [' ', 'Turn on led', 'play_drum'],
             ['R', 'get light', 'get_light_level'],
         ]   
     };
