@@ -71,7 +71,7 @@
             ['R', 'current button status', 'get_btn_status'],
             [' ', 'Turn off led', 'set_led_off'],
             [' ', 'Turn on led', 'set_led_on'],
-            [' ', 'Turn on led', 'play_drum'],
+            [' ', 'Play drum', 'play_drum'],
             ['R', 'get light', 'get_light_level'],
         ]   
     };
