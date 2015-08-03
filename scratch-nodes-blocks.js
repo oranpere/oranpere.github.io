@@ -1,9 +1,13 @@
 (function(ext) {
-    var socket = new WebSocket("ws://localhost:8080");
-    socket.onopen = function (event) {
-    };
+    var socket;
+    socketInit(); 
     
-    socket.onmessage = function (event) {
+    var socketInit = function(){
+        socket = new WebSocket("ws://localhost:8080");
+        socket.onmessage = onMessageHandler;
+    }
+    
+    var onMessageHandler = function (event) {
     var msg; 
       try{
            msg= JSON.parse(event.data);
@@ -35,24 +39,24 @@
 
     ext.get_btn_status = function(callback) {
         var msg = { 'type':'get-button-state' };
-        socket.send(JSON.stringify(msg));
+        sendMessage(msg);
         ext.button_state_callback = callback;
     };
 
     ext.set_led_off = function(callback) {
         var msg = { 'type':'turn-led-off' };
-        socket.send(JSON.stringify(msg));
+        sendMessage(msg);
      };
      
      
     ext.set_led_on = function(callback) {
        var msg = { 'type':'turn-led-on' };
-        socket.send(JSON.stringify(msg));
+        sendMessage(msg);
      };
      
       ext.get_light_level = function(callback) {
          var msg = { 'type':'get-light-level' };
-         socket.send(JSON.stringify(msg));
+        sendMessage(msg);
          ext.ligt_level_callback = callback;
      };
 
@@ -65,7 +69,15 @@
             ['R', 'get light', 'get_light_level'],
         ]   
     };
-
+    
+    var sendMessage = function(msg){
+        if(socket.readyState != 1){
+            socket = new WebSocket("ws://localhost:8080");
+            socketInit();
+        }
+        socket.send(JSON.stringify(msg));
+    }
+    
     // Register the extension
     ScratchExtensions.register('button statues', descriptor, ext);
 })({});
