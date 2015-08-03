@@ -2,7 +2,7 @@
     var socket;
     socketInit(); 
     
-    var socketInit = function(){
+     function socketInit(){
         socket = new WebSocket("ws://localhost:8080");
         socket.onmessage = onMessageHandler;
     }
