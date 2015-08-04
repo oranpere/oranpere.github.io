@@ -83,10 +83,10 @@
   };
 
   function sendMessage (msg) {
-    if (socket.readyState != 1) {
-      socket = new WebSocket("ws://localhost:8080");
-      socketInit();
-    }
+    // if (socket.readyState != 1) {
+    //   socket = new WebSocket("ws://localhost:8080");
+    //   socketInit();
+    // }
     socket.send(JSON.stringify(msg));
   }
 
