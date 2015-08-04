@@ -11,8 +11,8 @@
   
   function idSetup(){
     var date = new Date();
-    id = date.getTime();
-    var msg = { 'type': 'set-id', 'data': 'scratchx-' + id };
+    id = 'scratchx-' + date.getTime();
+    var msg = { 'type': 'set-id', 'data': id };
     sendMessage(msg);
   }
   
