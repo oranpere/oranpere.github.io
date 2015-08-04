@@ -69,8 +69,8 @@
     ext.ligt_level_callback = callback;
   };
 
-  ext.play_drum = function (callback) {
-    var msg = { 'type': 'play-drum', 'target_id': '1' };
+  ext.play_drum = function (deviceId,callback) {
+    var msg = { 'type': 'play-drum', 'target_id': deviceId };
     sendMessage(msg);
   };
 
