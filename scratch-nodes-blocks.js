@@ -80,7 +80,7 @@
       ['R', 'current button status', 'get_btn_status'],
       [' ', 'Turn off led', 'set_led_off'],
       [' ', 'Turn on led', 'set_led_on'],
-      [' ', 'Play drum', 'play_drum'],
+      [' ', 'Play drum on device %n', 'play_drum', 1],
       ['R', 'get light', 'get_light_level'],
     ]
   };
