@@ -6,7 +6,10 @@
   function socketInit() {
     socket = new WebSocket("ws://localhost:8080");
     socket.onmessage = onMessageHandler;
-    socket.readyState = 1;
+    socket.onopen = idSetup;
+  }
+  
+  function idSetup(){
     var date = new Date();
     id = date.getTime();
     var msg = { 'type': 'set-id', 'data': 'scratchx-' + id };
@@ -83,10 +86,10 @@
   };
 
   function sendMessage (msg) {
-    // if (socket.readyState != 1) {
-    //   socket = new WebSocket("ws://localhost:8080");
-    //   socketInit();
-    // }
+    if (socket.readyState != 1) {
+      socket = new WebSocket("ws://localhost:8080");
+      socketInit();
+    }
     socket.send(JSON.stringify(msg));
   }
 
