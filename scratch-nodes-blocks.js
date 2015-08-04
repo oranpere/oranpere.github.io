@@ -1,10 +1,14 @@
 (function(ext) {
   var socket;
   socketInit();
-
+  var id = "";
   function socketInit(){
     socket = new WebSocket("ws://localhost:8080");
     socket.onmessage = onMessageHandler;
+    var date = new Date();
+    id = date.getTime();
+    var msg = { 'type':'set-id' , 'data': 'scratchx-'+ id };
+    sendMessage(msg);
   }
 
   function onMessageHandler (event) {
@@ -38,7 +42,7 @@
       };
 
       ext.get_btn_status = function(callback) {
-        var msg = { 'type':'get-button-state' , 'target_id': '1' };
+        var msg = { 'type':'get-button-state' , 'target_id': id };
         sendMessage(msg);
         ext.button_state_callback = callback;
       };
@@ -55,7 +59,7 @@
       };
 
       ext.get_light_level = function(callback) {
-        var msg = { 'type':'get-light-level' , 'target_id': '1' };
+        var msg = { 'type':'get-light-level' , 'target_id': id };
         sendMessage(msg);
         ext.ligt_level_callback = callback;
       };
