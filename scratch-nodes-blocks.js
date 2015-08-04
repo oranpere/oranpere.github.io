@@ -72,8 +72,8 @@
     ext.ligt_level_callback = callback;
   };
 
-  ext.play_drum = function (deviceId, callback) {
-    var msg = { 'type': 'play-drum', 'target_id': deviceId };
+  ext.play_drum = function (drumId, deviceId, callback) {
+    var msg = { 'type': 'play-drum', 'target_id': deviceId, 'drum_id': drumId };
     sendMessage(msg);
   };
 
@@ -86,9 +86,9 @@
   var descriptor = {
     blocks: [
       ['R', 'current button status', 'get_btn_status'],
-      [' ', 'Turn off led', 'set_led_off'],
-      [' ', 'Turn on led', 'set_led_on'],
-      [' ', 'Play drum on device %n', 'play_drum', 1],
+      [' ', 'Turn off led on node: %s', 'set_led_off', 1],
+      [' ', 'Turn on led on node: %s', 'set_led_on', 1],
+      [' ', 'Play drum %n on device %n', 'play_drum', 1, 1],
       [' ', 'connect to server on: %s', 'connect_to_server', "localhost"],
       ['R', 'get light', 'get_light_level'],
     ]
