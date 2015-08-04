@@ -2,8 +2,7 @@
   var socket;
   socketInit("localhost");
   var id;
-  var date = new Date();
-  var lastGetLightLvlClock = date.getTime();
+  var lastGetLightLvlClock = new Date().getTime();
   var defaultServerIP = "localhost";
   
   function socketInit(ip, callback) {
@@ -14,7 +13,7 @@
 
   function idSetup() {
 
-    id = 'scratchx-' + date.getTime();
+    id = 'scratchx-' + new Date().getTime();
     var msg = { 'type': 'set-id', 'data': id };
     sendMessage(msg);
     if (typeof ext.connect_to_server_callback !== 'undefined') {
@@ -71,10 +70,10 @@
 
   ext.get_light_level = function (callback) {
     //50 frames per sec or less
-    if (date.getTime() - lastGetLightLvlClock < 20)
+    if (new Date().getTime() - lastGetLightLvlClock < 20)
       return;
       
-    lastGetLightLvlClock = date.getTime();
+    lastGetLightLvlClock = new Date().getTime();
     var msg = { 'type': 'get-light-level', 'target_id': id };
     sendMessage(msg);
     ext.ligt_level_callback = callback;
