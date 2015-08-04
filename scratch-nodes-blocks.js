@@ -4,6 +4,7 @@
   var id;
   var date = new Date();
   var lastGetLightLvlClock = date.getTime();
+  var defaultServerIP = "localhost";
   
   function socketInit(ip, callback) {
     socket = new WebSocket("ws://" + ip + ":8080");
@@ -86,6 +87,7 @@
 
   ext.connect_to_server = function (ip, callback) {
     ext.connect_to_server_callback = callback;
+    defaultServerIP = ip;
     socketInit(ip);
   }
 
@@ -103,7 +105,7 @@
 
   function sendMessage(msg) {
     if (socket.readyState != 1) {
-      socketInit();
+      socketInit(defaultServerIP);
     }
     socket.send(JSON.stringify(msg));
   }
