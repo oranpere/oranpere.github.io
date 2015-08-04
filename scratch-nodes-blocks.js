@@ -2,7 +2,9 @@
   var socket;
   socketInit();
   var id;
-
+  var date = new Date();
+  var lastGetLightLvlClock = date.getTime();
+  
   function socketInit(ip, callback) {
     socket = new WebSocket("ws://" + ip + ":8080");
     socket.onmessage = onMessageHandler;
@@ -10,7 +12,7 @@
   }
 
   function idSetup() {
-    var date = new Date();
+
     id = 'scratchx-' + date.getTime();
     var msg = { 'type': 'set-id', 'data': id };
     sendMessage(msg);
@@ -67,6 +69,11 @@
   };
 
   ext.get_light_level = function (callback) {
+    //50 frames per sec or less
+    if (date.getTime() - lastGetLightLvlClock < 20)
+      return;
+      
+    lastGetLightLvlClock = date.getTime();
     var msg = { 'type': 'get-light-level', 'target_id': id };
     sendMessage(msg);
     ext.ligt_level_callback = callback;
