@@ -1,21 +1,24 @@
 (function (ext) {
   var socket;
   socketInit();
-  var id = 1;
-  
-  function socketInit() {
-    socket = new WebSocket("ws://localhost:8080");
+  var id;
+
+  function socketInit(ip, callback) {
+    socket = new WebSocket("ws://" + ip + ":8080");
     socket.onmessage = onMessageHandler;
     socket.onopen = idSetup;
   }
-  
-  function idSetup(){
+
+  function idSetup() {
     var date = new Date();
     id = 'scratchx-' + date.getTime();
     var msg = { 'type': 'set-id', 'data': id };
     sendMessage(msg);
+    if (typeof ext.connect_to_server_callback !== 'undefined') {
+      ext.connect_to_server_callback("great success!");
+    }
   }
-  
+
   function onMessageHandler(event) {
     var msg;
     try {
@@ -69,10 +72,15 @@
     ext.ligt_level_callback = callback;
   };
 
-  ext.play_drum = function (deviceId,callback) {
+  ext.play_drum = function (deviceId, callback) {
     var msg = { 'type': 'play-drum', 'target_id': deviceId };
     sendMessage(msg);
   };
+
+  ext.connect_to_server = function (ip, callback) {
+    ext.connect_to_server_callback = callback;
+    socketInit(ip);
+  }
 
   // Block and block menu descriptions
   var descriptor = {
@@ -81,13 +89,13 @@
       [' ', 'Turn off led', 'set_led_off'],
       [' ', 'Turn on led', 'set_led_on'],
       [' ', 'Play drum on device %n', 'play_drum', 1],
+      [' ', 'connect to server on: %s', 'connect_to_server', "localhost"],
       ['R', 'get light', 'get_light_level'],
     ]
   };
 
-  function sendMessage (msg) {
+  function sendMessage(msg) {
     if (socket.readyState != 1) {
-      socket = new WebSocket("ws://localhost:8080");
       socketInit();
     }
     socket.send(JSON.stringify(msg));
