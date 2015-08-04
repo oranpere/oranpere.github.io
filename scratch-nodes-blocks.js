@@ -1,6 +1,6 @@
 (function (ext) {
   var socket;
-  socketInit();
+  socketInit("localhost");
   var id;
   var date = new Date();
   var lastGetLightLvlClock = date.getTime();
