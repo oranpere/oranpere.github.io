@@ -1,16 +1,18 @@
 (function (ext) {
   var socket;
   socketInit();
-  var id = "";
+  var id = 1;
+  
   function socketInit() {
     socket = new WebSocket("ws://localhost:8080");
     socket.onmessage = onMessageHandler;
+    socket.readyState = 1;
     var date = new Date();
     id = date.getTime();
     var msg = { 'type': 'set-id', 'data': 'scratchx-' + id };
     sendMessage(msg);
   }
-
+  
   function onMessageHandler(event) {
     var msg;
     try {
