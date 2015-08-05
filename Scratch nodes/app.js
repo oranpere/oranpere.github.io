@@ -21,4 +21,4 @@ var saveButtonState = function (msg) {
 udpServer.createListener(udpSocket, 3333, saveLight, saveButtonState);
 
 httpServerModule(httpServerPort);
-webSocketModule(udpServer, 8870);
+// webSocketModule(udpServer, 8870);
