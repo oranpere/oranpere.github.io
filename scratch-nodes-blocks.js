@@ -52,19 +52,19 @@
   };
 
   ext.get_btn_status = function (particleId, callback) {
-    var msg = { 'type': 'get-button-state', 'target_id': id ,'particle_id': particleId};
+    var msg = { 'type': 'get-button-state', 'target_id': id, 'particle_id': particleId };
     sendMessage(msg);
     ext.button_state_callback = callback;
   };
 
-  ext.set_led_off = function (callback) {
-    var msg = { 'type': 'turn-led-off', 'target_id': '1' };
+  ext.set_led_off = function (particleId, callback) {
+    var msg = { 'type': 'turn-led-off', 'target_id': particleId };
     sendMessage(msg);
   };
 
 
-  ext.set_led_on = function (callback) {
-    var msg = { 'type': 'turn-led-on', 'target_id': '1' };
+  ext.set_led_on = function (particleId,callback) {
+    var msg = { 'type': 'turn-led-on', 'target_id': particleId };
     sendMessage(msg);
   };
 
@@ -92,10 +92,10 @@
   // Block and block menu descriptions
   var descriptor = {
     blocks: [
-      ['R', 'current button status from node: %s', 'get_btn_status',"p1"],
-      [' ', 'Turn off led on node: %s', 'set_led_off', 1],
-      [' ', 'Turn on led on node: %s', 'set_led_on', 1],
-      [' ', 'Play drum %n on device %n', 'play_drum', 1, 1],
+      ['R', 'current button status from node: %s', 'get_btn_status', "p1"],
+      [' ', 'Turn off led on node: %s', 'set_led_off', 'p1'],
+      [' ', 'Turn on led on node: %s', 'set_led_on', 'p1'],
+      [' ', 'Play drum %n on device %s', 'play_drum', 1, '1'],
       [' ', 'connect to server on: %s', 'connect_to_server', "localhost"],
       ['R', 'get light from node: %s', 'get_light_level', "p1"],
     ]

@@ -12,10 +12,10 @@ var webSocketModule = function (messenger, port) {
 				switch (msg.type) {
 					case "turn-led-on":
 						log('turning leds on');
-						messenger.sendLedChangeMessage(new Buffer('1'),[msg.particle_id]);
+						messenger.sendMessage(new Buffer('1'),msg.particle_id);
 						break;
 					case "turn-led-off":
-						messenger.sendLedChangeMessage(new Buffer('0'),[msg.particle_id]);
+						messenger.sendMessage(new Buffer('0'),msg.particle_id);
 						log('turning leds off');
 						break;
 					case "get-light-level":
