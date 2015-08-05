@@ -2,6 +2,7 @@ const int btn1Pin = D0;
 const int ledPin = D7;
 const int lightResPin = A0;
 bool isClicked = false;
+bool previousIsClicked = false;
 int lightIntensity = 0;
 char packet[60];
 
@@ -29,6 +30,8 @@ void loop(){
 }
 
 void udpSendButtonState(){
+  if(isClicked == previousIsClicked)
+    return;
   udp.beginPacket("192.168.43.132", udpServerPort);
   if(isClicked){
     sprintf(packet, "{\"id\":\"p2\",\"sensor\":\"button\",\"value\":\"%d\"}", 1);
@@ -53,6 +56,7 @@ void udpGetLedState(){
 }
 
 void handleButtonClicks(){
+  previousIsClicked = isClicked;
   if(checkClick(btn1Pin))
     isClicked = true;
   else
@@ -61,7 +65,12 @@ void handleButtonClicks(){
 
 
 void udpSendLightIntensity(){
-  lightIntensity = analogRead(A0);
+  int tmp = analogRead(A0);
+
+  if(abs(tmp - lightIntensity) < 20)
+    return;
+  lightIntensity = tmp;
+
   udp.beginPacket("192.168.43.132", udpServerPort);
   sprintf(packet, "{\"id\":\"p2\",\"sensor\":\"light\",\"value\":\"%d\"}", lightIntensity);
   udp.write(packet);

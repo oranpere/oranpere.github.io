@@ -32,8 +32,8 @@ var Runtime = function () {
 
 // Initializer for the drawing and audio contexts.
 Runtime.prototype.init = function () {
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    this.audioContext = new AudioContext();
+    var Audio = window.AudioContext || window.webkitAudioContext;
+    this.audioContext = new Audio();
     try {
         this.audioGain = this.audioContext.createGain();
     } catch (err) {

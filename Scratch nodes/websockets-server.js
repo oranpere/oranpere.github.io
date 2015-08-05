@@ -2,7 +2,7 @@ var webSocketModule = function (messenger, port) {
 	var WebSocketServer = require('ws').Server
 		, wss = new WebSocketServer({ port: port });
 	var openSockets = [];
-	
+	var openedSocketsCount = 0;
 	wss.on('connection', function connection(ws) {
 		ws.on('message', function incoming(message) {
 			console.log(message);
@@ -12,10 +12,10 @@ var webSocketModule = function (messenger, port) {
 				switch (msg.type) {
 					case "turn-led-on":
 						log('turning leds on');
-						messenger.sendMessage(new Buffer('1'),msg.target_id);
+						messenger.sendMessage(new Buffer('1'), msg.target_id);
 						break;
 					case "turn-led-off":
-						messenger.sendMessage(new Buffer('0'),msg.target_id);
+						messenger.sendMessage(new Buffer('0'), msg.target_id);
 						log('turning leds off');
 						break;
 					case "get-light-level":
@@ -36,9 +36,17 @@ var webSocketModule = function (messenger, port) {
 						log('playing drum');
 						break;
 					case "set-id":
-						log("new node id :" + msg.data);
+						log("set node id :" + msg.data);
 						ws.id = msg.data.toString();
 						openSockets[ws.id] = ws;
+						break;
+					case "get-id":
+						log("new node id :" + msg.data);
+						ws.id = openedSocketsCount;
+						openedSocketsCount++;
+						openSockets[ws.id] = ws;
+						var assignIdMsg = { 'type': "assign-id", 'id': ws.id };
+						sendMessage(assignIdMsg,ws.id);
 						break;
 				}
 			} catch (e) {

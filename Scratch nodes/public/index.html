@@ -1,85 +1,94 @@
 <html lang="en">
-
-<head>
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src=static/js/sound/WAVFile.js></script>
-<script src=static/js/sound/SoundDecoder.js></script>
-<script src=static/js/sound/SoundBank.js></script>
-<script src=static/js/sound/NotePlayer.js></script>
-<script src=static/js/sound/audio-controller.js></script>
-<script src=Static/js/util/OffsetBuffer.js></script>
-<script src=static/js/IO.js></script>
-<script src=static/js/Sprite.js></script>
-<script src=static/js/Runtime.js></script>
-<script src=static/soundbank/Instr.js></script>
-<title></title>
-</head>
-
-<body>Loaded
-  <input id="node-id" type="text" value="1"></input>
-  <button id="button-change-id">Change Id</button>
-  <br/>
-  <input id="server-ip" type="text"></input>
-  <button id="button-change-ip">Change Id</button>
-</body>
-<script>
-var io = new IO();
-var runtime = new Runtime();
-runtime.init();
-var defaultId = 1;
-var defaultServerIp = "192.168.43.132";
-$('#server-ip').val(defaultServerIp);
-
-var iosAudioActive = false;
-// Touch events - EXPERIMENTAL
-$(window).bind('touchstart', function(e) {
-  // On iOS, we need to activate the Web Audio API
-  // with an empty sound play on the first touch event.
-  if (!iosAudioActive) {
-    var ibuffer = runtime.audioContext.createBuffer(1, 1, 22050);
-    var isource = runtime.audioContext.createBufferSource();
-    isource.buffer = ibuffer;
-    isource.connect(runtime.audioContext.destination);
-    isource.start();
-    iosAudioActive = true;
-  }
-});
-
-var socket;
-socketInit(defaultId,defaultServerIp);
-
-function socketInit(id, ip){
-  socket = new WebSocket("ws://"+ip+":8080");
-  socket.onopen = function (event) {
-    var msg = {'type':'set-id','data':id}
-    socket.send(JSON.stringify(msg));
-  };
-
-  socket.onmessage = function (event) {
-    var msg;
-    try{
-      msg= JSON.parse(event.data);
-      console.log(msg.type);
-      switch(msg.type) {
-        case "play-drum":
-          playDrum(msg.drum_id);
-          $('body').append('<div>drum</div>')
-          break;
-        }
-      }catch(e){
-        console.log('websockets - failed to parse message');
+  
+  <head>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src=static/js/sound/WAVFile.js></script>
+    <script src=static/js/sound/SoundDecoder.js></script>
+    <script src=static/js/sound/SoundBank.js></script>
+    <script src=static/js/sound/NotePlayer.js></script>
+    <script src=static/js/sound/audio-controller.js></script>
+    <script src=Static/js/util/OffsetBuffer.js></script>
+    <script src=static/js/IO.js></script>
+    <script src=static/js/Sprite.js></script>
+    <script src=static/js/Runtime.js></script>
+    <script src=static/soundbank/Instr.js></script>
+    <title></title>
+  </head>
+  
+  <body>
+    <div style="">
+      <div>
+        <span>This device id:</span>
+        <input id="node-id" type="text" value="1"></input>
+        <button id="button-reconnect-id">Reconnect</button>
+      </div>
+      <br/>
+      <div>
+        <span>Server address:</span>
+        <input id="server-ip" type="text"></input>
+      </div>
+    </div>
+  </body>
+  <script>
+    var io = new IO();
+    var runtime = new Runtime();
+    runtime.init();
+    var defaultId = 1;
+    var defaultServerIp = "192.168.43.132";
+    $('#server-ip').val(defaultServerIp);
+      
+    var iosAudioActive = false;
+    // Touch events - EXPERIMENTAL
+    $(window).bind('touchstart', function(e) {
+      // On iOS, we need to activate the Web Audio API
+      // with an empty sound play on the first touch event.
+     
+      if (!iosAudioActive) {
+        var ibuffer = runtime.audioContext.createBuffer(1, 1, 22050);
+        var isource = runtime.audioContext.createBufferSource();
+        
+        isource.buffer = ibuffer;
+        isource.connect(runtime.audioContext.destination);
+        isource.noteOn(0);
+        iosAudioActive = true;
+      playDrum();
       }
-    }
-  }
-
-  $('#button-change-id').on('click',function(){
-    socket.close();
-    socketInit($('#node-id').val(),$('#server-ip').val());
-  });
-  </script>
-<style>
-    button{
+    });
     
-    }
-</style>
+    var socket;
+    socketInit(defaultId,defaultServerIp);
+    
+    function socketInit(id, ip){
+      socket = new WebSocket("ws://"+ip+":8080");
+      socket.onopen = function (event) {
+        var msg = {'type':'get-id','data':id}
+        socket.send(JSON.stringify(msg));
+      };
+    
+      socket.onmessage = function (event) {
+        var msg;
+        try{
+          msg= JSON.parse(event.data);
+          console.log(msg.type);
+          switch(msg.type) {
+            case "play-drum":
+              playDrum(msg.drum_id);
+              // $('body').append('<div>drum</div>')
+              break;
+              case "assign-id":
+              $('#node-id').val(msg.id);
+              break;
+            }
+          }catch(e){
+            console.log('websockets - failed to parse message');
+          }
+        }
+      }
+    
+      $('#button-reconnect-id').on('click',function(){
+        socket.close();
+        socketInit($('#node-id').val(),$('#server-ip').val());
+      });
+  </script>
+
 </html>
