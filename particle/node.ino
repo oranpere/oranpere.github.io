@@ -34,9 +34,9 @@ void udpSendButtonState(){
     return;
   udp.beginPacket("192.168.43.132", udpServerPort);
   if(isClicked){
-    sprintf(packet, "{\"id\":\"p2\",\"sensor\":\"button\",\"value\":\"%d\"}", 1);
+    sprintf(packet, "{\"id\":\"green\",\"sensor\":\"button\",\"value\":\"%d\"}", 1);
   }else{
-    sprintf(packet, "{\"id\":\"p2\",\"sensor\":\"button\",\"value\":\"%d\"}", 0);
+    sprintf(packet, "{\"id\":\"green\",\"sensor\":\"button\",\"value\":\"%d\"}", 0);
   }
   udp.write(packet);
   udp.endPacket();
@@ -72,7 +72,7 @@ void udpSendLightIntensity(){
   lightIntensity = tmp;
 
   udp.beginPacket("192.168.43.132", udpServerPort);
-  sprintf(packet, "{\"id\":\"p2\",\"sensor\":\"light\",\"value\":\"%d\"}", lightIntensity);
+  sprintf(packet, "{\"id\":\"green\",\"sensor\":\"light\",\"value\":\"%d\"}", lightIntensity);
   udp.write(packet);
   udp.endPacket();
 }

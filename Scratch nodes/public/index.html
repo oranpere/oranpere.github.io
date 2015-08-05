@@ -28,10 +28,15 @@
     var runtime = new Runtime();
     runtime.init();
     var defaultServerIp = "192.168.43.132";
-      
+    var socket;
+    socketInit(defaultServerIp);
+    
     var iosAudioActive = false;
     // Touch events - EXPERIMENTAL
     $(window).bind('touchstart', function(e) {
+       if(socket.readyState != 1){
+         socketInit(ip);
+         }
       // On iOS, we need to activate the Web Audio API
       // with an empty sound play on the first touch event.
      playDrum();
@@ -46,9 +51,6 @@
         playDrum();
       }
     });
-    
-    var socket;
-    socketInit(defaultServerIp);
     
     function socketInit(ip){
       socket = new WebSocket("ws://"+ip+":8080");

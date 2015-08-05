@@ -85,12 +85,12 @@
   // Block and block menu descriptions
   var descriptor = {
     blocks: [
-      ['R', 'current button status from node: %s', 'get_btn_status', "p1"],
-      [' ', 'Turn off led on node: %s', 'set_led_off', 'p1'],
-      [' ', 'Turn on led on node: %s', 'set_led_on', 'p1'],
+      ['R', 'current button status from node: %s', 'get_btn_status', "green"],
+      [' ', 'Turn off led on node: %s', 'set_led_off', 'green'],
+      [' ', 'Turn on led on node: %s', 'set_led_on', 'green'],
       [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
       ['h', 'connect to server on: %s', 'connect_to_server', "localhost"],
-      ['R', 'get light from node: %s', 'get_light_level', "p1"],
+      ['R', 'get light from node: %s', 'get_light_level', "green"],
     ]
   };
 
