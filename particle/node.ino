@@ -3,49 +3,47 @@ const int ledPin = D7;
 const int lightResPin = A0;
 bool isClicked = false;
 int lightIntensity = 0;
+char packet[60];
 
-UDP UdpLightRes;
-const int udpLightResPort = 8880;
-
-UDP UdpLed;
-const int udpLedPort = 8881;
-
-UDP UdpButton;
-const int udpButtonPort = 8882;
+UDP udp;
+const int udpLocalPort = 8880;
+const int udpServerPort = 3333;
 
 void setup(){
   pinMode(btn1Pin, INPUT_PULLUP);
   pinMode(ledPin,OUTPUT);
   pinMode(lightResPin,INPUT);
   digitalWrite(ledPin, HIGH);
-  UdpLightRes.begin(udpLightResPort);
-  UdpLed.begin(udpLedPort);
-  UdpButton.begin(udpButtonPort);
+  udp.begin(udpLocalPort);
 }
 
 void loop(){
     handleButtonClicks();
+    delay(5);
     udpGetLedState();
+    delay(5);
     udpSendLightIntensity();
+    delay(5);
     udpSendButtonState();
+    delay(5);
 }
 
 void udpSendButtonState(){
-  UdpButton.beginPacket("192.168.43.132", 3334);
+  udp.beginPacket("192.168.43.132", udpServerPort);
   if(isClicked){
-    UdpButton.write('1');
+    sprintf(packet, "{\"id\":\"p2\",\"sensor\":\"button\",\"value\":\"%d\"}", 1);
   }else{
-    UdpButton.write('0');
+    sprintf(packet, "{\"id\":\"p2\",\"sensor\":\"button\",\"value\":\"%d\"}", 0);
   }
-  UdpButton.endPacket();
+  udp.write(packet);
+  udp.endPacket();
 }
 
-char c;
+char c = '\0';
 void udpGetLedState(){
-  if (UdpLed.parsePacket() > 0) {
-    c = UdpLed.read();
-
-    UdpLed.flush();
+  while (udp.parsePacket() > 0) {
+    c = udp.read();
+    udp.flush();
     if(c == '1')
       turnOnLed();
     if(c == '0')
@@ -61,13 +59,13 @@ void handleButtonClicks(){
     isClicked = false;
 }
 
-char packet[5];
+
 void udpSendLightIntensity(){
   lightIntensity = analogRead(A0);
-  UdpLightRes.beginPacket("192.168.43.132", 3333);
-  sprintf(packet, "%d", lightIntensity);
-  UdpLightRes.write(packet);
-  UdpLightRes.endPacket();
+  udp.beginPacket("192.168.43.132", udpServerPort);
+  sprintf(packet, "{\"id\":\"p2\",\"sensor\":\"light\",\"value\":\"%d\"}", lightIntensity);
+  udp.write(packet);
+  udp.endPacket();
 }
 
 bool checkClick(int pin){

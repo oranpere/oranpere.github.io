@@ -1,10 +1,30 @@
 var dgram = require("dgram");
 var udpLedChangePort = "8881";
-var particleIP = "192.168.43.177";
+var particleIPS = [];
 
-var createListener = function (dgramSocket, port, messageHandler) {
-  dgramSocket.on("message", function (msg, rinfo) {
-    messageHandler(msg);
+var createListener = function (dgramSocket, port, lightHandelr, buttonHandler) {
+  dgramSocket.on("message", function (message, rinfo) {
+    try {
+      console.log(message.toString());
+      msg = JSON.parse(message.toString());
+      switch (msg.sensor) {
+        case "button":
+          if (typeof particleIPS[msg.id] === 'undefined') {
+            particleIPS[msg.id] = rinfo.address;
+          }
+          buttonHandler(msg);
+          break;
+        case "light":
+          if (typeof particleIPS[msg.id] === 'undefined') {
+            particleIPS[msg.id] = rinfo.address;
+          }
+          lightHandelr(msg);
+          break;
+      }
+    } catch (e) {
+      console.log('udp - failed to parse message error: ' + e);
+    }
+
   });
   dgramSocket.on("listening", function () {
     var address = dgramSocket.address();
@@ -24,3 +44,4 @@ var sendLedChangeMessage = function (message) {
 
 module.exports.createListener = createListener;
 module.exports.sendLedChangeMessage = sendLedChangeMessage;
+ 

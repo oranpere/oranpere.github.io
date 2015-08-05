@@ -4,7 +4,7 @@
   var id;
   var lastGetLightLvlClock = new Date().getTime();
   var defaultServerIP = "localhost";
-  
+
   function socketInit(ip, callback) {
     socket = new WebSocket("ws://" + ip + ":8080");
     socket.onmessage = onMessageHandler;
@@ -51,8 +51,8 @@
     return { status: 2, msg: 'Ready' };
   };
 
-  ext.get_btn_status = function (callback) {
-    var msg = { 'type': 'get-button-state', 'target_id': id };
+  ext.get_btn_status = function (particleId, callback) {
+    var msg = { 'type': 'get-button-state', 'target_id': id ,'particle_id': particleId};
     sendMessage(msg);
     ext.button_state_callback = callback;
   };
@@ -68,13 +68,12 @@
     sendMessage(msg);
   };
 
-  ext.get_light_level = function (callback) {
+  ext.get_light_level = function (particleId, callback) {
     //50 frames per sec or less
     if (new Date().getTime() - lastGetLightLvlClock < 20)
       return;
-      
     lastGetLightLvlClock = new Date().getTime();
-    var msg = { 'type': 'get-light-level', 'target_id': id };
+    var msg = { 'type': 'get-light-level', 'target_id': id, 'particle_id': particleId };
     sendMessage(msg);
     ext.ligt_level_callback = callback;
   };
@@ -93,12 +92,12 @@
   // Block and block menu descriptions
   var descriptor = {
     blocks: [
-      ['R', 'current button status', 'get_btn_status'],
+      ['R', 'current button status from node: %s', 'get_btn_status',"p1"],
       [' ', 'Turn off led on node: %s', 'set_led_off', 1],
       [' ', 'Turn on led on node: %s', 'set_led_on', 1],
       [' ', 'Play drum %n on device %n', 'play_drum', 1, 1],
       [' ', 'connect to server on: %s', 'connect_to_server', "localhost"],
-      ['R', 'get light', 'get_light_level'],
+      ['R', 'get light from node: %s', 'get_light_level', "p1"],
     ]
   };
 

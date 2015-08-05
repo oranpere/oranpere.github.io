@@ -12,7 +12,6 @@ var httpServerModule = function (httpServerPort) {
 
     console.log('http server listening at http://%s:%s', host, port);
   });
-
 }
 
 module.exports = httpServerModule;

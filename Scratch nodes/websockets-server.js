@@ -12,23 +12,22 @@ var webSocketModule = function (messenger, port) {
 				switch (msg.type) {
 					case "turn-led-on":
 						log('turning leds on');
-						messenger.sendLedChangeMessage(new Buffer('1'));
+						messenger.sendLedChangeMessage(new Buffer('1'),[msg.particle_id]);
 						break;
 					case "turn-led-off":
-						messenger.sendLedChangeMessage(new Buffer('0'));
+						messenger.sendLedChangeMessage(new Buffer('0'),[msg.particle_id]);
 						log('turning leds off');
 						break;
 					case "get-light-level":
-
-						if (messenger.lightLevelMsg == "")
+						if (typeof messenger.lightLevelMsg[msg.particle_id] === 'undefined')
 							return;
-						sendMessage(messenger.lightLevelMsg, msg.target_id);
+						sendMessage(messenger.lightLevelMsg[msg.particle_id], msg.target_id);
 						log('getting light level');
 						break;
 					case "get-button-state":
-						if (messenger.buttonStateMsg == "")
+						if (typeof messenger.buttonStateMsg[msg.particle_id] === 'undefined')
 							return;
-						sendMessage(messenger.buttonStateMsg, msg.target_id);
+						sendMessage(messenger.buttonStateMsg[msg.particle_id], msg.target_id);
 						log('turning leds off');
 						break;
 					case "play-drum":

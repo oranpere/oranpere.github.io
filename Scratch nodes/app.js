@@ -3,31 +3,22 @@ var udpServer = require('./udp-server.js');
 var httpServerModule = require("./http-server");
 var webSocketModule = require("./websockets-server");
 
-var udpServerLight = dgram.createSocket("udp4");
-var udpServerButtonState = dgram.createSocket("udp4");
+var udpSocket = dgram.createSocket("udp4");
 
-var lightlevelMsg = "";
-var buttonStateMsg = ""; 
+udpServer.lightLevelMsg = [];
+udpServer.buttonStateMsg = [];
 
 var httpServerPort = 59552;
 
-var saveLight = function(msg){
-  udpServer.lightLevelMsg = {'type':'light-level','data':msg.toString()};
+var saveLight = function (msg) {
+  udpServer.lightLevelMsg[msg.id] = { 'type': 'light-level', 'data': msg.value, 'nodei-id': msg.id };
 }
 
-var saveButtonState = function(msg){
-  udpServer.buttonStateMsg = {'type':'button-state','data':msg.toString()};
+var saveButtonState = function (msg) {
+  udpServer.buttonStateMsg[msg.id] = { 'type': 'button-state', 'data': msg.value, 'nodei-id': msg.id };
 };
 
-udpServer.createListener(udpServerLight,3333,saveLight);
-udpServer.createListener(udpServerButtonState,3334,saveButtonState);
-
-var drumsMsg = function(){
-  var msg = {
-    type: "playDrum",
-  };
-  return msg;
-}
+udpServer.createListener(udpSocket, 3333, saveLight, saveButtonState);
 
 httpServerModule(httpServerPort);
-webSocketModule(udpServer,8080);
+webSocketModule(udpServer, 8080);
