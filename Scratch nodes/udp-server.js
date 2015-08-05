@@ -39,7 +39,7 @@ var sendMessage = function (message, particleId) {
     if (typeof messengingClient[particleId] === 'undefined')
     messengingClient[particleId] = dgram.createSocket('udp4');
   
-  messengingClient[particleId].send(message, 0, message.length, udpParticlePorts, particleIP);
+  messengingClient[particleId].send(message, 0, message.length, udpParticlePorts, particleIPS[particleId]);
   }
   catch(e){
     console.log('udp sending message error: ' + e);

@@ -2,7 +2,6 @@
   var socket;
   socketInit("localhost");
   var id;
-  var lastGetLightLvlClock = new Date().getTime();
   var defaultServerIP = "localhost";
 
   function socketInit(ip, callback) {
@@ -27,12 +26,14 @@
       msg = JSON.parse(event.data);
       switch (msg.type) {
         case "light-level":
-          if (ext.ligt_level_callback)
-            ext.ligt_level_callback(msg.data);
+          if (typeof ext.ligt_level_callback === 'undefined')
+            return;
+          ext.ligt_level_callback(msg.data);
           break;
         case "button-state":
-          if (ext.ligt_level_callback)
-            ext.button_state_callback(msg.data);
+          if (typeof ext.button_state_callback === 'undefined')
+            return;
+          ext.button_state_callback(msg.data);
           break;
       }
     } catch (e) {
@@ -55,6 +56,7 @@
     var msg = { 'type': 'get-button-state', 'target_id': id, 'particle_id': particleId };
     sendMessage(msg);
     ext.button_state_callback = callback;
+    setTimeout(function(){ ext.button_state_callback("null"); ext.button_state_callback = {}; }, 1000);
   };
 
   ext.set_led_off = function (particleId, callback) {
@@ -63,19 +65,16 @@
   };
 
 
-  ext.set_led_on = function (particleId,callback) {
+  ext.set_led_on = function (particleId, callback) {
     var msg = { 'type': 'turn-led-on', 'target_id': particleId };
     sendMessage(msg);
   };
 
   ext.get_light_level = function (particleId, callback) {
-    //50 frames per sec or less
-    if (new Date().getTime() - lastGetLightLvlClock < 20)
-      return;
-    lastGetLightLvlClock = new Date().getTime();
     var msg = { 'type': 'get-light-level', 'target_id': id, 'particle_id': particleId };
     sendMessage(msg);
     ext.ligt_level_callback = callback;
+    setTimeout(function(){ ext.ligt_level_callback("null"); ext.ligt_level_callback = {}; }, 1000);
   };
 
   ext.play_drum = function (drumId, deviceId, callback) {
