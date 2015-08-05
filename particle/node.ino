@@ -1,4 +1,3 @@
-
 const int btn1Pin = D0;
 const int ledPin = D7;
 const int lightResPin = A0;
@@ -18,7 +17,7 @@ void setup(){
   pinMode(btn1Pin, INPUT_PULLUP);
   pinMode(ledPin,OUTPUT);
   pinMode(lightResPin,INPUT);
-
+  digitalWrite(ledPin, HIGH);
   UdpLightRes.begin(udpLightResPort);
   UdpLed.begin(udpLedPort);
   UdpButton.begin(udpButtonPort);
