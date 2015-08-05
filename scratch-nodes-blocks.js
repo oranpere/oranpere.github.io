@@ -52,7 +52,6 @@
     var msg = { 'type': 'get-button-state', 'target_id': id, 'particle_id': particleId };
     sendMessage(msg);
     ext.button_state_callback = callback;
-    setTimeout(function(){ ext.button_state_callback("null"); ext.button_state_callback = {}; }, 2000);
   };
 
   ext.set_led_off = function (particleId, callback) {
@@ -70,7 +69,6 @@
     var msg = { 'type': 'get-light-level', 'target_id': id, 'particle_id': particleId };
     sendMessage(msg);
     ext.ligt_level_callback = callback;
-    setTimeout(function(){ ext.ligt_level_callback("null"); ext.ligt_level_callback = {}; }, 2000);
   };
 
   ext.play_drum = function (drumId, deviceId, callback) {
