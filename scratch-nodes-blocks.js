@@ -11,13 +11,9 @@
   }
 
   function idSetup() {
-
     id = 'scratchx-' + new Date().getTime();
     var msg = { 'type': 'set-id', 'data': id };
     sendMessage(msg);
-    if (typeof ext.connect_to_server_callback !== 'undefined') {
-      ext.connect_to_server_callback("great success!");
-    }
   }
 
   function onMessageHandler(event) {
@@ -26,12 +22,12 @@
       msg = JSON.parse(event.data);
       switch (msg.type) {
         case "light-level":
-          if (typeof ext.ligt_level_callback === 'undefined')
+          if (!(typeof ext.ligt_level_callback === 'function'))
             return;
           ext.ligt_level_callback(msg.data);
           break;
         case "button-state":
-          if (typeof ext.button_state_callback === 'undefined')
+          if (!(typeof ext.button_state_callback === 'function'))
             return;
           ext.button_state_callback(msg.data);
           break;
@@ -56,7 +52,7 @@
     var msg = { 'type': 'get-button-state', 'target_id': id, 'particle_id': particleId };
     sendMessage(msg);
     ext.button_state_callback = callback;
-    setTimeout(function(){ ext.button_state_callback("null"); ext.button_state_callback = {}; }, 1000);
+    setTimeout(function(){ ext.button_state_callback("null"); ext.button_state_callback = {}; }, 2000);
   };
 
   ext.set_led_off = function (particleId, callback) {
@@ -74,7 +70,7 @@
     var msg = { 'type': 'get-light-level', 'target_id': id, 'particle_id': particleId };
     sendMessage(msg);
     ext.ligt_level_callback = callback;
-    setTimeout(function(){ ext.ligt_level_callback("null"); ext.ligt_level_callback = {}; }, 1000);
+    setTimeout(function(){ ext.ligt_level_callback("null"); ext.ligt_level_callback = {}; }, 2000);
   };
 
   ext.play_drum = function (drumId, deviceId, callback) {
@@ -82,10 +78,10 @@
     sendMessage(msg);
   };
 
-  ext.connect_to_server = function (ip, callback) {
-    ext.connect_to_server_callback = callback;
+  ext.connect_to_server = function (ip) {
     defaultServerIP = ip;
     socketInit(ip);
+    return true;
   }
 
   // Block and block menu descriptions
@@ -94,8 +90,8 @@
       ['R', 'current button status from node: %s', 'get_btn_status', "p1"],
       [' ', 'Turn off led on node: %s', 'set_led_off', 'p1'],
       [' ', 'Turn on led on node: %s', 'set_led_on', 'p1'],
-      [' ', 'Play drum %n on device %s', 'play_drum', 1, '1'],
-      [' ', 'connect to server on: %s', 'connect_to_server', "localhost"],
+      [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
+      ['h', 'connect to server on: %s', 'connect_to_server', "localhost"],
       ['R', 'get light from node: %s', 'get_light_level', "p1"],
     ]
   };

@@ -12,37 +12,25 @@
     <script src=static/js/Sprite.js></script>
     <script src=static/js/Runtime.js></script>
     <script src=static/soundbank/Instr.js></script>
+    <link rel="stylesheet" type="text/css" href="static/css/mobile.css">
     <title></title>
   </head>
   
   <body>
-    <div style="">
-      <div>
-        <span>This device id:</span>
-        <input id="node-id" type="text" value="1"></input>
-        <button id="button-reconnect-id">Reconnect</button>
-      </div>
-      <br/>
-      <div>
-        <span>Server address:</span>
-        <input id="server-ip" type="text"></input>
-      </div>
-    </div>
+    <div id="button1" class="round-button"><div class="round-button-circle"><span class="unselectable" id='node-id'>1</span></div></div>
   </body>
   <script>
     var io = new IO();
     var runtime = new Runtime();
     runtime.init();
-    var defaultId = 1;
     var defaultServerIp = "192.168.43.132";
-    $('#server-ip').val(defaultServerIp);
       
     var iosAudioActive = false;
     // Touch events - EXPERIMENTAL
     $(window).bind('touchstart', function(e) {
       // On iOS, we need to activate the Web Audio API
       // with an empty sound play on the first touch event.
-     
+     playDrum();
       if (!iosAudioActive) {
         var ibuffer = runtime.audioContext.createBuffer(1, 1, 22050);
         var isource = runtime.audioContext.createBufferSource();
@@ -51,21 +39,22 @@
         isource.connect(runtime.audioContext.destination);
         isource.noteOn(0);
         iosAudioActive = true;
-      playDrum();
+        playDrum();
       }
     });
     
     var socket;
-    socketInit(defaultId,defaultServerIp);
+    socketInit(defaultServerIp);
     
-    function socketInit(id, ip){
+    function socketInit(ip){
       socket = new WebSocket("ws://"+ip+":8080");
       socket.onopen = function (event) {
-        var msg = {'type':'get-id','data':id}
+        var msg = {'type':'get-id'}
         socket.send(JSON.stringify(msg));
       };
     
       socket.onmessage = function (event) {
+       
         var msg;
         try{
           msg= JSON.parse(event.data);
@@ -76,7 +65,7 @@
               // $('body').append('<div>drum</div>')
               break;
               case "assign-id":
-              $('#node-id').val(msg.id);
+              $('#node-id').text(msg.id);
               break;
             }
           }catch(e){
@@ -85,9 +74,12 @@
         }
       }
     
-      $('#button-reconnect-id').on('click',function(){
-        socket.close();
-        socketInit($('#node-id').val(),$('#server-ip').val());
+      $('#button1').on('click',function(){
+        if(socket.readyState != 1){
+          socketInit(defaultServerIp);
+        }
+        var msg = {'type':'get-id'}
+        socket.send()
       });
   </script>
 
