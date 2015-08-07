@@ -65,27 +65,27 @@
     return { status: 2, msg: 'Ready' };
   };
 
-  ext.get_btn_status = function (nodeId, callback) {
+  ext.get_btn_status = function (nodeId) {
     return (valueOrDefault(ext.button_state[nodeId]));
   };
 
-  ext.get_x_value = function (nodeId, callback) {
+  ext.get_x_value = function (nodeId) {
     return (valueOrDefault(ext.x_axis_value[nodeId]));
   };
 
-  ext.get_y_value = function (nodeId, callback) {
+  ext.get_y_value = function (nodeId) {
     return (valueOrDefault(ext.y_axis_value[nodeId]));
   };
 
-  ext.get_z_value = function (nodeId, callback) {
+  ext.get_z_value = function (nodeId) {
     return (valueOrDefault(ext.z_axis_value[nodeId]));
   };
 
-  ext.get_mic_value = function (nodeId, callback) {
+  ext.get_mic_value = function (nodeId) {
     return (valueOrDefault(ext.mic_value[nodeId]));
   };
 
-  ext.get_light_level = function (nodeId, callback) {
+  ext.get_light_level = function (nodeId) {
     return (valueOrDefault(ext.ligt_level[nodeId]))
   };
   
@@ -95,7 +95,7 @@
     return sensorValue;
   }
 
-  ext.play_drum = function (drumId, deviceId, callback) {
+  ext.play_drum = function (drumId, deviceId) {
     var msg = { 'type': 'play-drum', 'target_id': deviceId, 'drum_id': drumId };
     sendMessage(msg);
   };
