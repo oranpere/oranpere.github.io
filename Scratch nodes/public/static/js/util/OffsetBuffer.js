@@ -19,7 +19,7 @@
 var OffsetBuffer = function(data) {
     this.offset = 0;
     this.ab = data;
-};
+}; 
 
 // Read various datatypes from the ArrayBuffer, seeking the offset.
 OffsetBuffer.prototype.readString = function(length) {
