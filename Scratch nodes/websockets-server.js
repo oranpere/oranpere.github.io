@@ -41,8 +41,8 @@ var webSocketModule = function (messenger, port) {
 						openSockets[ws.id] = ws;
 						break;
 					case "set-led-rgb":
-						log("set led rgb: "+msg.data);
-						messenger.sendMessage(msg.data,msg.target_id)
+						log("set led rgb: "+msg.data + "target id :"+msg.target_id);
+						messenger.sendMessage(new Buffer(msg.data),msg.target_id)
 						break;
 					case "get-id":
 						log("new node id :" + msg.data);
@@ -58,7 +58,7 @@ var webSocketModule = function (messenger, port) {
 			}
 		});
 		function log(msg) {
-			// console.log(msg);
+			console.log(msg);
 		}
 		function sendMessage(msg, id) {
 			console.log(msg);

@@ -19,6 +19,12 @@ UDP udp;
 const int udpLocalPort = 27000;
 const int udpServerPort = 27001;
 
+int red;
+int green;
+int blue;
+char* receivedPacket[10];
+
+
 #define PIXEL_COUNT 8
 #define PIXEL_TYPE WS2812B
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, ledPin, PIXEL_TYPE);
@@ -26,6 +32,10 @@ const int BLACK = strip.Color(0,0,0);
 const int RED = strip.Color(10,0,0);
 
 void setup(){
+  Spark.variable("red", &red, INT);
+  Spark.variable("green", &green, INT);
+  Spark.variable("blue", &blue, INT);
+  Spark.variable("packet", &receivedPacket, STRING);
   pinMode(btn1Pin, INPUT_PULLUP);
   pinMode(ledPin,OUTPUT);
   pinMode(lightResPin,INPUT);
@@ -34,10 +44,12 @@ void setup(){
   pinMode(YAxisPin,INPUT);
   pinMode(MicPin,INPUT);
   strip.begin();
+  strip.setPixelColor(7,strip.Color(14,0,0));
   strip.show(); // Initialize all pixels to 'off'
 
   digitalWrite(ledPin, HIGH);
   udp.begin(udpLocalPort);
+
 }
 
 void loop(){
@@ -73,29 +85,34 @@ void udpSendButtonState(){
 }
 
 void udpGetLedState(){
-  int pos = 0;
-  char rgbInputcolorArray[10];
-
-  while (udp.parsePacket() > 0) {
-    char c =  udp.read();
-    if(isdigit(c)){
-      rgbInputcolorArray[pos] = c;
-      pos++;
+  if (udp.parsePacket() > 0) {
+    char rgbInputcolorArray[11];
+    udp.read(rgbInputcolorArray, 12);
+    if(rgbInputcolorArray[11] != ';')
+      return;
+      int red = getRGBValueFromChars(rgbInputcolorArray[0],rgbInputcolorArray[1],rgbInputcolorArray[2]);
+      int green = getRGBValueFromChars(rgbInputcolorArray[3],rgbInputcolorArray[4],rgbInputcolorArray[5]);
+      int blue = getRGBValueFromChars(rgbInputcolorArray[6],rgbInputcolorArray[7],rgbInputcolorArray[8]);
+      int ledNumber = calcNumber(rgbInputcolorArray[9])*10 + calcNumber(rgbInputcolorArray[10]);
+      strip.setPixelColor(ledNumber,strip.Color(red,green,blue));
+      strip.show();
     }
-  }
-
-  udp.flush();
-  if(isValidNumberOfDigitsForColorArray(pos)){
-    int red = {rgbInputcolorArray[0]*100+rgbInputcolorArray[1]*10+rgbInputcolorArray[2]};
-    int green = {rgbInputcolorArray[3]*100+rgbInputcolorArray[4]*10+rgbInputcolorArray[5]};
-    int blue = {rgbInputcolorArray[6]*100+rgbInputcolorArray[7]*10+rgbInputcolorArray[8]};
-    strip.setPixelColor(rgbInputcolorArray[9],red,green,blue);
-  }
-  pos = 0;
 }
 
-bool isValidNumberOfDigitsForColorArray(int count){
-  return count == 10;
+int calcNumber(char c){
+  return c - '0';
+}
+
+int getRGBValueFromChars(char c0,char c1,char c2){
+  return validateRGBValue(calcNumber(c0) *100 + calcNumber(c1) *10 + calcNumber(c2));
+}
+
+int validateRGBValue(int colorInteger){
+  if(colorInteger < 0)
+    return 0;
+  if(colorInteger > 255)
+    return 255;
+  return colorInteger;
 }
 
 void registerButtonClick(){

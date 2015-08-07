@@ -35,13 +35,14 @@ var createListener = function (dgramSocket, port, lightHandelr, buttonHandler) {
 };
 
 var sendMessage = function (message, particleId) {
-  try{
-    if (typeof messengingClient[particleId] === 'undefined')
-    messengingClient[particleId] = dgram.createSocket('udp4');
-  
-  messengingClient[particleId].send(message, 0, message.length, udpParticlePorts, particleIPS[particleId]);
+  try {
+    if (typeof messengingClient[particleId] === 'undefined') {
+      messengingClient[particleId] = dgram.createSocket('udp4');
+    }
+    console.log(particleIPS[particleId]);
+    messengingClient[particleId].send(message, 0, message.length, udpParticlePorts, particleIPS[particleId]);
   }
-  catch(e){
+  catch (e) {
     console.log('udp sending message error: ' + e);
   }
 };

@@ -77,7 +77,7 @@
   };
 
   ext.set_led_rgb = function (ledId, redVal, greenVal, blueVal, nodeId) {
-    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': padWithZeros(redVal) + padWithZeros(greenVal) + padWithZeros(blueVal) + ledId + closingChar};
+    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': padWithZeros(redVal,3) + padWithZeros(greenVal,3) + padWithZeros(blueVal,3) + padWithZeros(ledId,2) + closingChar};
     sendMessage(msg);
   };
 
@@ -107,8 +107,8 @@
     socket.send(JSON.stringify(msg));
   }
 
-  function padWithZeros(color) {
-    while (color.length < 3) {
+  function padWithZeros(color , numberOfZeros) {
+    while (color.length < numberOfZeros) {
       color = '0' + color;
     }
     return color;
