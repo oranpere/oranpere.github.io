@@ -114,7 +114,7 @@
   // Block and block menu descriptions
   var descriptor = {
     blocks: [
-      ['h', 'connect to server on: %s', 'connect_to_server', "localhost"],
+      ['h', 'connect to server on: %s', 'connect_to_server', defaultServerIP],
       ['r', 'Button clicked in Node: %s', 'get_btn_status', "red"],
       ['r', 'Light of Node: %s', 'get_light_level', "red"],
       ['r', 'X Acceleration of Node: %s', 'get_x_axis_value', "red"],
