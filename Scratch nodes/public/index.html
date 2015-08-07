@@ -7,7 +7,7 @@
     <script src=static/js/sound/SoundBank.js></script>
     <script src=static/js/sound/NotePlayer.js></script>
     <script src=static/js/sound/audio-controller.js></script>
-    <script src=Static/js/util/OffsetBuffer.js></script>
+    <script src=static/js/util/OffsetBuffer.js></script>
     <script src=static/js/IO.js></script>
     <script src=static/js/Sprite.js></script>
     <script src=static/js/Runtime.js></script>
@@ -27,7 +27,7 @@
     var io = new IO();
     var runtime = new Runtime();
     runtime.init();
-    var defaultServerIp = "192.168.43.132";
+    var defaultServerIp = "52.6.39.58";
     var socket;
     socketInit(defaultServerIp);
     
@@ -53,7 +53,7 @@
     });
     
     function socketInit(ip){
-      socket = new WebSocket("ws://"+ip+":8080");
+      socket = new WebSocket("ws://"+ip+":59553");
       socket.onopen = function (event) {
         var msg = {'type':'get-id'}
         socket.send(JSON.stringify(msg));
