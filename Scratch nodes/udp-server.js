@@ -1,5 +1,5 @@
 var dgram = require("dgram");
-var udpParticlePorts = "8880";
+var udpParticlePorts = "27000";
 var particleIPS = [];
 var messengingClient = [];
 

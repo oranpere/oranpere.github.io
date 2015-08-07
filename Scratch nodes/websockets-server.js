@@ -40,6 +40,10 @@ var webSocketModule = function (messenger, port) {
 						ws.id = msg.data.toString();
 						openSockets[ws.id] = ws;
 						break;
+					case "set-led-rgb":
+						log("set led rgb: "+msg.data);
+						messenger.sendMessage(msg.data,msg.target_id)
+						break;
 					case "get-id":
 						log("new node id :" + msg.data);
 						ws.id = openedSocketsCount;
