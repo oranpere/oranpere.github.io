@@ -75,9 +75,9 @@
     var msg = { 'type': 'play-drum', 'target_id': deviceId, 'drum_id': drumId };
     sendMessage(msg);
   };
-  
-  ext.set_led_rgb = function(ledId,redVal,greenVal,blueVal,nodeId){
-    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': ledId+redVal+greenVal+blueVal };
+
+  ext.set_led_rgb = function (ledId, redVal, greenVal, blueVal, nodeId) {
+    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': ledId + padWithZeros(redVal) + padWithZeros(greenVal) + padWithZeros(blueVal) };
     sendMessage(msg);
   };
 
@@ -93,7 +93,7 @@
       ['R', 'current button status from node: %s', 'get_btn_status', "green"],
       [' ', 'Turn off led on node: %s', 'set_led_off', 'green'],
       [' ', 'Turn on led on node: %s', 'set_led_on', 'green'],
-      [' ', 'set led %s, red:%s, green:%s, blue:%s, on node: %s', 'set_led_rgb', '0','10','0','0','red'],
+      [' ', 'set led %s, red:%s, green:%s, blue:%s, on node: %s', 'set_led_rgb', '0', '10', '0', '0', 'red'],
       [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
       ['h', 'connect to server on: %s', 'connect_to_server', "localhost"],
       ['R', 'get light from node: %s', 'get_light_level', "green"],
@@ -105,6 +105,13 @@
       socketInit(defaultServerIP);
     }
     socket.send(JSON.stringify(msg));
+  }
+
+  function padWithZeros(color) {
+    while (color.length < 3) {
+      color = '0' + color;
+    }
+    return color;
   }
 
   // Register the extension
