@@ -66,27 +66,27 @@
   };
 
   ext.get_btn_status = function (nodeId, callback) {
-    callback(valueOrDefault(ext.button_state[nodeId]));
+    return (valueOrDefault(ext.button_state[nodeId]));
   };
 
   ext.get_x_value = function (nodeId, callback) {
-    callback(valueOrDefault(ext.x_axis_value[nodeId]));
+    return (valueOrDefault(ext.x_axis_value[nodeId]));
   };
 
   ext.get_y_value = function (nodeId, callback) {
-    callback(valueOrDefault(ext.y_axis_value[nodeId]));
+    return (valueOrDefault(ext.y_axis_value[nodeId]));
   };
 
   ext.get_z_value = function (nodeId, callback) {
-    callback(valueOrDefault(ext.z_axis_value[nodeId]));
+    return (valueOrDefault(ext.z_axis_value[nodeId]));
   };
 
   ext.get_mic_value = function (nodeId, callback) {
-    callback(valueOrDefault(ext.mic_value[nodeId]));
+    return (valueOrDefault(ext.mic_value[nodeId]));
   };
 
   ext.get_light_level = function (nodeId, callback) {
-    callback(valueOrDefault(ext.ligt_level[nodeId]))
+    return (valueOrDefault(ext.ligt_level[nodeId]))
   };
   
   function valueOrDefault(sensorValue){
@@ -115,12 +115,12 @@
   var descriptor = {
     blocks: [
       ['h', 'connect to server on: %s', 'connect_to_server', "localhost"],
-      ['R', 'Button clicked in Node: %s', 'get_btn_status', "red"],
-      ['R', 'Light of Node: %s', 'get_light_level', "red"],
-      ['R', 'X Acceleration of Node: %s', 'get_x_axis_value', "red"],
-      ['R', 'Y Acceleration of Node: %s', 'get_y_axis_value', "red"],
-      ['R', 'Z Acceleration of Node: %s', 'get_z_axis_value', "red"],
-      ['R', 'Microphone of Node: %s', 'get_mic_value', "red"],
+      ['r', 'Button clicked in Node: %s', 'get_btn_status', "red"],
+      ['r', 'Light of Node: %s', 'get_light_level', "red"],
+      ['r', 'X Acceleration of Node: %s', 'get_x_axis_value', "red"],
+      ['r', 'Y Acceleration of Node: %s', 'get_y_axis_value', "red"],
+      ['r', 'Z Acceleration of Node: %s', 'get_z_axis_value', "red"],
+      ['r', 'Microphone of Node: %s', 'get_mic_value', "red"],
       [' ', 'Set LED %m.ledNumber of Node %s  to color  Red:%s, Green:%s, Blue:%s', 'set_led_rgb', '0', 'red','10', '0', '0'],
       [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
     ],
