@@ -77,7 +77,7 @@
   };
 
   ext.set_led_rgb = function (ledId, redVal, greenVal, blueVal, nodeId) {
-    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': ledId + padWithZeros(redVal) + padWithZeros(greenVal) + padWithZeros(blueVal) };
+    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': padWithZeros(redVal) + padWithZeros(greenVal) + padWithZeros(blueVal) + ledId };
     sendMessage(msg);
   };
 
