@@ -7,12 +7,12 @@
   ext.z_axis_value = "Not Available";
   ext.mic_value = "Not Available";
 
-  socketInit("localhost");
+
   var id;
-  var defaultServerIP = "localhost";
+  var defaultServerIP = "52.6.39.58";
   var closingChar = ';';
   function socketInit(ip, callback) {
-    socket = new WebSocket("ws://" + ip + ":8080");
+    socket = new WebSocket("ws://" + ip + ":59553");
     socket.onmessage = onMessageHandler;
     socket.onopen = idSetup;
   }
@@ -22,6 +22,8 @@
     var msg = { 'type': 'set-id', 'data': id };
     sendMessage(msg);
   }
+
+  socketInit(defaultServerIP);
 
   function onMessageHandler(event) {
     var msg;
@@ -66,11 +68,11 @@
   ext.get_btn_status = function (particleId, callback) {
     callback(ext.button_state);
   };
-  
+
   ext.get_x_value = function (particleId, callback) {
     callback(ext.x_axis_value);
   };
-  
+
   ext.get_y_value = function (particleId, callback) {
     callback(ext.y_axis_value);
   };
@@ -78,7 +80,7 @@
   ext.get_z_value = function (particleId, callback) {
     callback(ext.z_axis_value);
   };
-  
+
   ext.get_mic_value = function (particleId, callback) {
     callback(ext.mic_value);
   };
@@ -106,16 +108,19 @@
   // Block and block menu descriptions
   var descriptor = {
     blocks: [
-      ['R', 'current button status from node: %s', 'get_btn_status', "red"],
-      ['R', 'current X axis value from node: %s', 'get_x_axis_value', "red"],
-      ['R', 'current y axis value from node: %s', 'get_y_axis_value', "red"],
-      ['R', 'current z axis value from node: %s', 'get_z_axis_value', "red"],
-      ['R', 'current mic value from node: %s', 'get_mic_value', "red"],
-      [' ', 'set led %s, red:%s, green:%s, blue:%s, on node: %s', 'set_led_rgb', '0', '10', '0', '0', 'red'],
-      [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
       ['h', 'connect to server on: %s', 'connect_to_server', "localhost"],
-      ['R', 'get light from node: %s', 'get_light_level', "red"],
-    ]
+      ['R', 'Button clicked in Node: %s', 'get_btn_status', "red"],
+      ['R', 'Light of Node: %s', 'get_light_level', "red"],
+      ['R', 'X Acceleration of Node: %s', 'get_x_axis_value', "red"],
+      ['R', 'Y Acceleration of Node: %s', 'get_y_axis_value', "red"],
+      ['R', 'Z Acceleration of Node: %s', 'get_z_axis_value', "red"],
+      ['R', 'Microphone of Node: %s', 'get_mic_value', "red"],
+      [' ', 'set led %m.ledNumber color red:%s, green:%s, blue:%s, of node: %s', 'set_led_rgb', '0', '10', '0', '0', 'red'],
+      [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
+    ],
+    menus: {
+        ledNumber: ['0', '1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+    }
   };
 
   function sendMessage(msg) {
