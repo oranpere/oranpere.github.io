@@ -3,7 +3,7 @@
   socketInit("localhost");
   var id;
   var defaultServerIP = "localhost";
-
+  var closingChar = ';';
   function socketInit(ip, callback) {
     socket = new WebSocket("ws://" + ip + ":8080");
     socket.onmessage = onMessageHandler;
@@ -77,7 +77,7 @@
   };
 
   ext.set_led_rgb = function (ledId, redVal, greenVal, blueVal, nodeId) {
-    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': padWithZeros(redVal) + padWithZeros(greenVal) + padWithZeros(blueVal) + ledId };
+    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': padWithZeros(redVal) + padWithZeros(greenVal) + padWithZeros(blueVal) + ledId + closingChar};
     sendMessage(msg);
   };
 
