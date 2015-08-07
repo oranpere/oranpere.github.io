@@ -90,7 +90,7 @@
   };
   
   function valueOrDefault(sensorValue){
-    if(typeof value === 'undefined')
+    if(typeof sensorValue === 'undefined')
      return "Not Available";
     return sensorValue;
   }
