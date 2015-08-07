@@ -1,12 +1,12 @@
 (function (ext) {
   var socket;
-  ext.ligt_level = "Not Available";
-  ext.button_status = "Not Available";
-  ext.x_axis_value = "Not Available";
-  ext.y_axis_value = "Not Available";
-  ext.z_axis_value = "Not Available";
-  ext.mic_value = "Not Available";
-
+  ext.ligt_level = [];
+  ext.button_status = [];
+  ext.x_axis_value = [];
+  ext.y_axis_value = [];
+  ext.z_axis_value = [];
+  ext.mic_value = [];
+ 
 
   var id;
   var defaultServerIP = "52.6.39.58";
@@ -31,22 +31,22 @@
       msg = JSON.parse(event.data);
       switch (msg.type) {
         case "light-level":
-          ext.ligt_level = msg.data;
+          ext.ligt_level[msg.node_id] = msg.data;
           break;
         case "button-state":
-          ext.button_state = msg.data;
+          ext.button_state[msg.node_id] = msg.data;
           break;
         case "x-axis-value":
-          ext.x_axis_value = msg.data;
+          ext.x_axis_value[msg.node_id] = msg.data;
           break;
         case "y-axis-value":
-          ext.y_axis_value = msg.data;
+          ext.y_axis_value[msg.node_id] = msg.data;
           break;
         case "z-axis-value":
-          ext.z_axis_value = msg.data;
+          ext.z_axis_value[msg.node_id] = msg.data;
           break;
         case "mic-value":
-          ext.mic_value = msg.data;
+          ext.mic_value[msg.node_id] = msg.data;
           break;
       }
     } catch (e) {
@@ -65,29 +65,35 @@
     return { status: 2, msg: 'Ready' };
   };
 
-  ext.get_btn_status = function (particleId, callback) {
-    callback(ext.button_state);
+  ext.get_btn_status = function (nodeId, callback) {
+    callback(valueOrDefault(ext.button_state[nodeId]));
   };
 
-  ext.get_x_value = function (particleId, callback) {
-    callback(ext.x_axis_value);
+  ext.get_x_value = function (nodeId, callback) {
+    callback(valueOrDefault(ext.x_axis_value[nodeId]));
   };
 
-  ext.get_y_value = function (particleId, callback) {
-    callback(ext.y_axis_value);
+  ext.get_y_value = function (nodeId, callback) {
+    callback(valueOrDefault(ext.y_axis_value[nodeId]));
   };
 
-  ext.get_z_value = function (particleId, callback) {
-    callback(ext.z_axis_value);
+  ext.get_z_value = function (nodeId, callback) {
+    callback(valueOrDefault(ext.z_axis_value[nodeId]));
   };
 
-  ext.get_mic_value = function (particleId, callback) {
-    callback(ext.mic_value);
+  ext.get_mic_value = function (nodeId, callback) {
+    callback(valueOrDefault(ext.mic_value[nodeId]));
   };
 
-  ext.get_light_level = function (particleId, callback) {
-    callback(ext.ligt_level)
+  ext.get_light_level = function (nodeId, callback) {
+    callback(valueOrDefault(ext.ligt_level[nodeId]))
   };
+  
+  function valueOrDefault(sensorValue){
+    if(typeof value === 'undefined')
+     return "Not Available";
+    return sensorValue;
+  }
 
   ext.play_drum = function (drumId, deviceId, callback) {
     var msg = { 'type': 'play-drum', 'target_id': deviceId, 'drum_id': drumId };
