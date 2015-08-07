@@ -1,5 +1,12 @@
 (function (ext) {
   var socket;
+  ext.ligt_level = "Not Available";
+  ext.button_status = "Not Available";
+  ext.x_axis_value = "Not Available";
+  ext.y_axis_value = "Not Available";
+  ext.z_axis_value = "Not Available";
+  ext.mic_value = "Not Available";
+
   socketInit("localhost");
   var id;
   var defaultServerIP = "localhost";
@@ -22,14 +29,22 @@
       msg = JSON.parse(event.data);
       switch (msg.type) {
         case "light-level":
-          if (!(typeof ext.ligt_level_callback === 'function'))
-            return;
-          ext.ligt_level_callback(msg.data);
+          ext.ligt_level = msg.data;
           break;
         case "button-state":
-          if (!(typeof ext.button_state_callback === 'function'))
-            return;
-          ext.button_state_callback(msg.data);
+          ext.button_state = msg.data;
+          break;
+        case "x-axis-value":
+          ext.x_axis_value = msg.data;
+          break;
+        case "y-axis-value":
+          ext.y_axis_value = msg.data;
+          break;
+        case "z-axis-value":
+          ext.z_axis_value = msg.data;
+          break;
+        case "mic-value":
+          ext.mic_value = msg.data;
           break;
       }
     } catch (e) {
@@ -49,26 +64,27 @@
   };
 
   ext.get_btn_status = function (particleId, callback) {
-    var msg = { 'type': 'get-button-state', 'target_id': id, 'particle_id': particleId };
-    sendMessage(msg);
-    ext.button_state_callback = callback;
+    callback(ext.button_state);
+  };
+  
+  ext.get_x_value = function (particleId, callback) {
+    callback(ext.x_axis_value);
+  };
+  
+  ext.get_y_value = function (particleId, callback) {
+    callback(ext.y_axis_value);
   };
 
-  ext.set_led_off = function (particleId, callback) {
-    var msg = { 'type': 'turn-led-off', 'target_id': particleId };
-    sendMessage(msg);
+  ext.get_z_value = function (particleId, callback) {
+    callback(ext.z_axis_value);
   };
-
-
-  ext.set_led_on = function (particleId, callback) {
-    var msg = { 'type': 'turn-led-on', 'target_id': particleId };
-    sendMessage(msg);
+  
+  ext.get_mic_value = function (particleId, callback) {
+    callback(ext.mic_value);
   };
 
   ext.get_light_level = function (particleId, callback) {
-    var msg = { 'type': 'get-light-level', 'target_id': id, 'particle_id': particleId };
-    sendMessage(msg);
-    ext.ligt_level_callback = callback;
+    callback(ext.ligt_level)
   };
 
   ext.play_drum = function (drumId, deviceId, callback) {
@@ -77,7 +93,7 @@
   };
 
   ext.set_led_rgb = function (ledId, redVal, greenVal, blueVal, nodeId) {
-    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': padWithZeros(redVal,3) + padWithZeros(greenVal,3) + padWithZeros(blueVal,3) + padWithZeros(ledId,2) + closingChar};
+    var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': padWithZeros(redVal, 3) + padWithZeros(greenVal, 3) + padWithZeros(blueVal, 3) + padWithZeros(ledId, 2) + closingChar };
     sendMessage(msg);
   };
 
@@ -90,13 +106,15 @@
   // Block and block menu descriptions
   var descriptor = {
     blocks: [
-      ['R', 'current button status from node: %s', 'get_btn_status', "green"],
-      [' ', 'Turn off led on node: %s', 'set_led_off', 'green'],
-      [' ', 'Turn on led on node: %s', 'set_led_on', 'green'],
+      ['R', 'current button status from node: %s', 'get_btn_status', "red"],
+      ['R', 'current X axis value from node: %s', 'get_x_axis_value', "red"],
+      ['R', 'current y axis value from node: %s', 'get_y_axis_value', "red"],
+      ['R', 'current z axis value from node: %s', 'get_z_axis_value', "red"],
+      ['R', 'current mic value from node: %s', 'get_mic_value', "red"],
       [' ', 'set led %s, red:%s, green:%s, blue:%s, on node: %s', 'set_led_rgb', '0', '10', '0', '0', 'red'],
       [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
       ['h', 'connect to server on: %s', 'connect_to_server', "localhost"],
-      ['R', 'get light from node: %s', 'get_light_level', "green"],
+      ['R', 'get light from node: %s', 'get_light_level', "red"],
     ]
   };
 
@@ -107,7 +125,7 @@
     socket.send(JSON.stringify(msg));
   }
 
-  function padWithZeros(color , numberOfZeros) {
+  function padWithZeros(color, numberOfZeros) {
     while (color.length < numberOfZeros) {
       color = '0' + color;
     }
