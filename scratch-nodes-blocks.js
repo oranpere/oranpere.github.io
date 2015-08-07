@@ -94,7 +94,7 @@
     sendMessage(msg);
   };
 
-  ext.set_led_rgb = function (ledId, redVal, greenVal, blueVal, nodeId) {
+  ext.set_led_rgb = function (ledId,nodeId, redVal, greenVal, blueVal ) {
     var msg = { 'type': 'set-led-rgb', 'target_id': nodeId, 'data': padWithZeros(redVal, 3) + padWithZeros(greenVal, 3) + padWithZeros(blueVal, 3) + padWithZeros(ledId, 2) + closingChar };
     sendMessage(msg);
   };
@@ -115,7 +115,7 @@
       ['R', 'Y Acceleration of Node: %s', 'get_y_axis_value', "red"],
       ['R', 'Z Acceleration of Node: %s', 'get_z_axis_value', "red"],
       ['R', 'Microphone of Node: %s', 'get_mic_value', "red"],
-      [' ', 'Set LED %m.ledNumber of Node %s to color red:%s, green:%s, blue:%s', 'set_led_rgb', '0', 'red','10', '0', '0'],
+      [' ', 'Set LED %m.ledNumber of Node %s  to color  Red:%s, Green:%s, Blue:%s', 'set_led_rgb', '0', 'red','10', '0', '0'],
       [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
     ],
     menus: {
