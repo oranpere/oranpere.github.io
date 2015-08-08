@@ -19,7 +19,7 @@
 
   function idSetup() {
     id = 'scratchx-' + new Date().getTime();
-    var msg = { 'type': 'set-id', 'data': id };
+    var msg = { 'type': 'set-id-scratch-x', 'data': id };
     sendMessage(msg);
   }
 
@@ -117,9 +117,9 @@
       ['h', 'connect to server on: %s', 'connect_to_server', defaultServerIP],
       ['r', 'Button clicked in Node: %s', 'get_btn_status', "red"],
       ['r', 'Light of Node: %s', 'get_light_level', "red"],
-      ['r', 'X Acceleration of Node: %s', 'get_x_axis_value', "red"],
-      ['r', 'Y Acceleration of Node: %s', 'get_y_axis_value', "red"],
-      ['r', 'Z Acceleration of Node: %s', 'get_z_axis_value', "red"],
+      ['r', 'X Acceleration of Node: %s', 'get_x_value', "red"],
+      ['r', 'Y Acceleration of Node: %s', 'get_y_value', "red"],
+      ['r', 'Z Acceleration of Node: %s', 'get_z_value', "red"],
       ['r', 'Microphone of Node: %s', 'get_mic_value', "red"],
       [' ', 'Set LED %m.ledNumber of Node %s  to color  Red:%s, Green:%s, Blue:%s', 'set_led_rgb', '0', 'red','10', '0', '0'],
       [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
