@@ -7,7 +7,7 @@ const int ZAxisPin = A1;
 const int YAxisPin = A2;
 const int XAxisPin = A3;
 const int MicPin = A4;
-const char* server = "192.168.43.132";
+const char* server = "52.6.39.58";
 const char* id = "red";
 const char* messageTemplate = "{\"id\":\"%s\",\"sensor\":\"%s\",\"value\":\"%d\"}";
 const int delayMilis = 3;
@@ -19,12 +19,6 @@ UDP udp;
 const int udpLocalPort = 27000;
 const int udpServerPort = 27001;
 
-int red;
-int green;
-int blue;
-char* receivedPacket[10];
-
-
 #define PIXEL_COUNT 8
 #define PIXEL_TYPE WS2812B
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, ledPin, PIXEL_TYPE);
@@ -32,10 +26,6 @@ const int BLACK = strip.Color(0,0,0);
 const int RED = strip.Color(10,0,0);
 
 void setup(){
-  Spark.variable("red", &red, INT);
-  Spark.variable("green", &green, INT);
-  Spark.variable("blue", &blue, INT);
-  Spark.variable("packet", &receivedPacket, STRING);
   pinMode(btn1Pin, INPUT_PULLUP);
   pinMode(ledPin,OUTPUT);
   pinMode(lightResPin,INPUT);

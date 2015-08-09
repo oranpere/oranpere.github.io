@@ -3,7 +3,7 @@ var udpParticlePorts = "27000";
 var particleIPS = [];
 var messengingClient = [];
 
-var createListener = function (dgramSocket, port, lightHandelr, buttonHandler) {
+var createListener = function (dgramSocket, port, lightHandelr, buttonHandler, micHandler, xHandler, yHandler, zHandler) {
   dgramSocket.on("message", function (message, rinfo) {
     try {
       console.log(message.toString());
@@ -18,6 +18,18 @@ var createListener = function (dgramSocket, port, lightHandelr, buttonHandler) {
           break;
         case "light":
           lightHandelr(msg);
+          break;
+        case "mic":
+          micHandler(msg);
+          break;
+        case "x-axis":
+          xHandler(msg);
+          break;
+        case "y-axis":
+          yHandler(msg);
+          break;
+        case "z-axis":
+          zHandler(msg);
           break;
       }
     } catch (e) {
