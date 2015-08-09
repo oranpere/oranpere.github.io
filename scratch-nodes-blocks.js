@@ -55,7 +55,7 @@
   }
 
 function setAccelemeratorValue(value){
-  return (value - 2000)/200;
+  return (value - 2000)/40;
 }
 
   // Cleanup function when the extension is unloaded
