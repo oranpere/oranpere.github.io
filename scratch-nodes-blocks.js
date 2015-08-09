@@ -31,19 +31,19 @@
       msg = JSON.parse(event.data);
       switch (msg.type) {
         case "light-level":
-          ext.ligt_level[msg.node_id] = msg.data;
+          ext.ligt_level[msg.node_id] = msg.data/200;
           break;
         case "button-state":
           ext.button_state[msg.node_id] = msg.data;
           break;
         case "x-axis-value":
-          ext.x_axis_value[msg.node_id] = msg.data;
+          ext.x_axis_value[msg.node_id] = setAccelemeratorValue(msg.data);
           break;
         case "y-axis-value":
-          ext.y_axis_value[msg.node_id] = msg.data;
+          ext.y_axis_value[msg.node_id] = setAccelemeratorValue(msg.data);
           break;
         case "z-axis-value":
-          ext.z_axis_value[msg.node_id] = msg.data;
+          ext.z_axis_value[msg.node_id] = setAccelemeratorValue(msg.data);
           break;
         case "mic-value":
           ext.mic_value[msg.node_id] = msg.data;
@@ -53,6 +53,10 @@
       console.log('websockets - failed to parse message');
     }
   }
+
+function setAccelemeratorValue(value){
+  return (value - 2000)/200;
+}
 
   // Cleanup function when the extension is unloaded
   ext._shutdown = function () {
@@ -89,6 +93,14 @@
     return (valueOrDefault(ext.ligt_level[nodeId]))
   };
   
+  ext.get_total_acceleration = function (nodeId) {
+    return (valueOrDefault(ext.ligt_level[nodeId]))
+  };
+  
+  function calculateAccelerationOnAllAxes(){
+    return  ext.x_axis_value *  ext.x_axis_value +  ext.y_axis_value *  ext.y_axis_value +  ext.z_axis_value *  ext.z_axis_value;
+  }
+  
   function valueOrDefault(sensorValue){
     if(typeof sensorValue === 'undefined')
      return "Not Available";
@@ -120,6 +132,7 @@
       ['r', 'X Acceleration of Node: %s', 'get_x_value', "red"],
       ['r', 'Y Acceleration of Node: %s', 'get_y_value', "red"],
       ['r', 'Z Acceleration of Node: %s', 'get_z_value', "red"],
+      ['r', 'XYZ Acceleration of Node: %s', 'get_total_acceleration', "red"],
       ['r', 'Microphone of Node: %s', 'get_mic_value', "red"],
       [' ', 'Set LED %s of Node %s  to color  Red:%s, Green:%s, Blue:%s', 'set_led_rgb', '0', 'red','10', '0', '0'],
       [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
