@@ -5,7 +5,7 @@ const int ledPin = D7;
 const int lightResPin = A0;
 const int ZAxisPin = A1;
 const int YAxisPin = A2;
-const int XAxisPin = A3; 
+const int XAxisPin = A3;
 const int MicPin = A4;
 const char* server = "192.168.43.132";
 const char* id = "red";
@@ -118,25 +118,25 @@ void udpSendLightIntensity(){
 }
 
 void udpSendZAxis(){
-  int analogValue = checkForChangesBeyondThreshold(100,ZAxisPin,1);
+  int analogValue = checkForChangesBeyondThreshold(50,ZAxisPin,1);
   if(analogValue != -1)
     sendUdpPacket("z-axis", analogValue);
 }
 
 void udpSendYAxis(){
-  int analogValue = checkForChangesBeyondThreshold(100,YAxisPin,2);
+  int analogValue = checkForChangesBeyondThreshold(50,YAxisPin,2);
   if(analogValue != -1)
     sendUdpPacket("y-axis", analogValue);
 }
 
 void udpSendXAxis(){
-  int analogValue = checkForChangesBeyondThreshold(100,XAxisPin,3);
+  int analogValue = checkForChangesBeyondThreshold(50,XAxisPin,3);
   if(analogValue != -1)
     sendUdpPacket("x-axis", analogValue);
 }
 
 void udpSendMic(){
-  int analogValue = checkForChangesBeyondThreshold(300,MicPin,4);
+  int analogValue = checkForChangesBeyondThreshold(200,MicPin,4);
   if(analogValue != -1)
     sendUdpPacket("mic", analogValue);
 }

@@ -9,7 +9,7 @@
  
 
   var id;
-  var defaultServerIP = "52.6.39.58";
+  var defaultServerIP = "192.168.43.132";
   var closingChar = ';';
   function socketInit(ip, callback) {
     socket = new WebSocket("ws://" + ip + ":59553");
