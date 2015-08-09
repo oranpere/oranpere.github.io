@@ -5,20 +5,38 @@ var webSocketModule = require("./websockets-server");
 
 var udpSocket = dgram.createSocket("udp4");
 
-udpServer.lightLevelMsg = [];
-udpServer.buttonStateMsg = [];
-
 var httpServerPort = 59552;
 
+
+function rgbLedsHandler(msg) {
+  udpServer.sendMessage(new Buffer(msg.data), msg.target_id);
+}
+
+
+
 var saveLight = function (msg) {
-  udpServer.lightLevelMsg[msg.id] = { 'type': 'light-level', 'data': msg.value, 'nodei-id': msg.id };
+  var message = { 'type': 'light-level', 'data': msg.value, 'node_id': msg.id };
+  webSocketModule.sendToAllScratchXInstances(message);
 }
 
 var saveButtonState = function (msg) {
-  udpServer.buttonStateMsg[msg.id] = { 'type': 'button-state', 'data': msg.value, 'nodei-id': msg.id };
+  var message = { 'type': 'button-state', 'data': msg.value, 'node_id': msg.id };
+  webSocketModule.sendToAllScratchXInstances(message);
+};
+
+var saveMicState = function (msg) {
+  var message = { 'type': 'mic-value', 'data': msg.value, 'node_id': msg.id };
+  webSocketModule.sendToAllScratchXInstances(message);
+};
+
+var saveXAxisState = function (msg) {
+  var message = { 'type': 'x-axis-value', 'data': msg.value, 'node_id': msg.id };
+  webSocketModule.sendToAllScratchXInstances(message);
 };
 
 udpServer.createListener(udpSocket, 27001, saveLight, saveButtonState);
 
+
+
 httpServerModule(httpServerPort);
-webSocketModule(udpServer, 59553);
+webSocketModule.socket(rgbLedsHandler, 59553);

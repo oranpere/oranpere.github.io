@@ -121,7 +121,7 @@
       ['r', 'Y Acceleration of Node: %s', 'get_y_value', "red"],
       ['r', 'Z Acceleration of Node: %s', 'get_z_value', "red"],
       ['r', 'Microphone of Node: %s', 'get_mic_value', "red"],
-      [' ', 'Set LED %m.ledNumber of Node %s  to color  Red:%s, Green:%s, Blue:%s', 'set_led_rgb', '0', 'red','10', '0', '0'],
+      [' ', 'Set LED %s of Node %s  to color  Red:%s, Green:%s, Blue:%s', 'set_led_rgb', '0', 'red','10', '0', '0'],
       [' ', 'Play drum %n on node: %s', 'play_drum', 1, '1'],
     ],
     menus: {

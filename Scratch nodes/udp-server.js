@@ -8,17 +8,15 @@ var createListener = function (dgramSocket, port, lightHandelr, buttonHandler) {
     try {
       console.log(message.toString());
       msg = JSON.parse(message.toString());
+      //List particle core id to adress it later on
+      if (typeof particleIPS[msg.id] === 'undefined') {
+        particleIPS[msg.id] = rinfo.address;
+      }
       switch (msg.sensor) {
         case "button":
-          if (typeof particleIPS[msg.id] === 'undefined') {
-            particleIPS[msg.id] = rinfo.address;
-          }
           buttonHandler(msg);
           break;
         case "light":
-          if (typeof particleIPS[msg.id] === 'undefined') {
-            particleIPS[msg.id] = rinfo.address;
-          }
           lightHandelr(msg);
           break;
       }

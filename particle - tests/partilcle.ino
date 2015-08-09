@@ -1,5 +1,3 @@
-#include "neopixel.h"
-
 const int btn1Pin = D0;
 const int ledPin = D7;
 const int lightResPin = A0;
@@ -25,13 +23,9 @@ int blue;
 char* receivedPacket[10];
 
 
-#define PIXEL_COUNT 8
-#define PIXEL_TYPE WS2812B
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, ledPin, PIXEL_TYPE);
-const int BLACK = strip.Color(0,0,0);
-const int RED = strip.Color(10,0,0);
-
 void setup(){
+  Serial.begin(9600);
+  while(!Serial.available()) SPARK_WLAN_Loop();
   Spark.variable("red", &red, INT);
   Spark.variable("green", &green, INT);
   Spark.variable("blue", &blue, INT);
@@ -43,11 +37,11 @@ void setup(){
   pinMode(XAxisPin,INPUT);
   pinMode(YAxisPin,INPUT);
   pinMode(MicPin,INPUT);
-  strip.begin();
-  strip.show(); // Initialize all pixels to 'off'
 
+  digitalWrite(ledPin, HIGH);
   udp.begin(udpLocalPort);
-
+  Serial.println("hi");
+  delay(1000);
 }
 
 void loop(){
@@ -84,17 +78,20 @@ void udpSendButtonState(){
 
 void udpGetLedState(){
   if (udp.parsePacket() > 0) {
-    char rgbInputcolorArray[11];
-    udp.read(rgbInputcolorArray, 12);
-    if(rgbInputcolorArray[11] != ';')
-      return;
-      int red = getRGBValueFromChars(rgbInputcolorArray[0],rgbInputcolorArray[1],rgbInputcolorArray[2]);
-      int green = getRGBValueFromChars(rgbInputcolorArray[3],rgbInputcolorArray[4],rgbInputcolorArray[5]);
-      int blue = getRGBValueFromChars(rgbInputcolorArray[6],rgbInputcolorArray[7],rgbInputcolorArray[8]);
-      int ledNumber = calcNumber(rgbInputcolorArray[9])*10 + calcNumber(rgbInputcolorArray[10]);
-      strip.setPixelColor(ledNumber,strip.Color(red,green,blue));
-      strip.show();
-    }
+  char rgbInputcolorArray[11];
+  udp.read(rgbInputcolorArray, 11);
+  if(rgbInputcolorArray[10] != ';')
+    return;
+    int red = getRGBValueFromChars(rgbInputcolorArray[0],rgbInputcolorArray[1],rgbInputcolorArray[2]);
+    int green = getRGBValueFromChars(rgbInputcolorArray[3],rgbInputcolorArray[4],rgbInputcolorArray[5]);
+    int blue = getRGBValueFromChars(rgbInputcolorArray[6],rgbInputcolorArray[7],rgbInputcolorArray[8]);
+    int ledNumber = rgbInputcolorArray[9];
+    Serial.println(red);
+    Serial.println(ledNumber);
+    /*strip.setPixelColor(ledNumber,strip.Color(red,green,blue));*/
+    /*strip.show();*/
+  }
+
 }
 
 int calcNumber(char c){
@@ -111,6 +108,10 @@ int validateRGBValue(int colorInteger){
   if(colorInteger > 255)
     return 255;
   return colorInteger;
+}
+
+bool isValidNumberOfDigitsForColorArray(int pos){
+  return pos == 9;
 }
 
 void registerButtonClick(){
@@ -183,14 +184,4 @@ void turnOnLed(){
 
 void turnOffLed(){
     digitalWrite(ledPin,LOW);
-}
-
-// Set all pixels in the strip to a solid color, then wait (ms)
-void colorAll(uint32_t c) {
-  uint16_t i;
-
-  for(i=0; i<strip.numPixels(); i++) {
-    strip.setPixelColor(i, c);
-  }
-  strip.show();
 }

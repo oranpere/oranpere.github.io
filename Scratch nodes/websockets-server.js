@@ -1,8 +1,13 @@
-var webSocketModule = function (messenger, port) {
+var openSockets = [];
+var openedSocketsCount = 0;
+var openScratchXSockets = [];
+
+
+var webSocketModule = function (rgbLedsHandler, port) {
 	var WebSocketServer = require('ws').Server
 		, wss = new WebSocketServer({ port: port });
-	var openSockets = [];
-	var openedSocketsCount = 0;
+
+
 	wss.on('connection', function connection(ws) {
 		ws.on('message', function incoming(message) {
 			console.log(message);
@@ -10,26 +15,6 @@ var webSocketModule = function (messenger, port) {
 			try {
 				msg = JSON.parse(message);
 				switch (msg.type) {
-					case "turn-led-on":
-						log('turning leds on');
-						messenger.sendMessage(new Buffer('1'), msg.target_id);
-						break;
-					case "turn-led-off":
-						messenger.sendMessage(new Buffer('0'), msg.target_id);
-						log('turning leds off');
-						break;
-					case "get-light-level":
-						if (typeof messenger.lightLevelMsg[msg.particle_id] === 'undefined')
-							return;
-						sendMessage(messenger.lightLevelMsg[msg.particle_id], msg.target_id);
-						log('getting light level');
-						break;
-					case "get-button-state":
-						if (typeof messenger.buttonStateMsg[msg.particle_id] === 'undefined')
-							return;
-						sendMessage(messenger.buttonStateMsg[msg.particle_id], msg.target_id);
-						log('turning leds off');
-						break;
 					case "play-drum":
 						var drumMsg = { 'type': "play-drum", 'drum_id': msg.drum_id };
 						sendMessage(drumMsg, msg.target_id);
@@ -40,9 +25,14 @@ var webSocketModule = function (messenger, port) {
 						ws.id = msg.data.toString();
 						openSockets[ws.id] = ws;
 						break;
+					case "set-id-scratch-x":
+						log("set scratch x id :" + msg.data);
+						ws.id = msg.data.toString();
+						openScratchXSockets[ws.id] = ws;
+						break;
 					case "set-led-rgb":
-						log("set led rgb: "+msg.data + "target id :"+msg.target_id);
-						messenger.sendMessage(new Buffer(msg.data),msg.target_id)
+						log("set led rgb: " + msg.data + "target id :" + msg.target_id);
+						rgbLedsHandler(msg);
 						break;
 					case "get-id":
 						log("new node id :" + msg.data);
@@ -50,7 +40,7 @@ var webSocketModule = function (messenger, port) {
 						openedSocketsCount++;
 						openSockets[ws.id] = ws;
 						var assignIdMsg = { 'type': "assign-id", 'id': ws.id };
-						sendMessage(assignIdMsg,ws.id);
+						sendMessage(assignIdMsg, ws.id);
 						break;
 				}
 			} catch (e) {
@@ -69,4 +59,13 @@ var webSocketModule = function (messenger, port) {
 	console.log("websockets server running on: " + port);
 }
 
-module.exports = webSocketModule;
+var sendToAllScratchXInstances = function sendToAllScratchXInstances(msg) {
+	for (var i in openScratchXSockets) {
+		console.log(msg);
+		openScratchXSockets[i].send(JSON.stringify(msg));
+	}
+};
+
+
+module.exports.socket = webSocketModule;
+module.exports.sendToAllScratchXInstances = sendToAllScratchXInstances;
