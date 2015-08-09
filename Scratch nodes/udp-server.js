@@ -50,6 +50,7 @@ var sendMessage = function (message, particleId) {
       messengingClient[particleId] = dgram.createSocket('udp4');
     }
     console.log(particleIPS[particleId]);
+    console.log(message);
     messengingClient[particleId].send(message, 0, message.length, udpParticlePorts, particleIPS[particleId]);
   }
   catch (e) {
