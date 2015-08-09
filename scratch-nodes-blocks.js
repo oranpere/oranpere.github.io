@@ -31,7 +31,7 @@
       msg = JSON.parse(event.data);
       switch (msg.type) {
         case "light-level":
-          ext.ligt_level[msg.node_id] = msg.data/200;
+          ext.ligt_level[msg.node_id] = 100 - msg.data/20;
           break;
         case "button-state":
           ext.button_state[msg.node_id] = msg.data;
@@ -98,7 +98,7 @@ function setAccelemeratorValue(value){
   };
   
   function calculateAccelerationOnAllAxes(){
-    return  ext.x_axis_value *  ext.x_axis_value +  ext.y_axis_value *  ext.y_axis_value +  ext.z_axis_value *  ext.z_axis_value;
+    return  ((ext.x_axis_value *  ext.x_axis_value) +  (ext.y_axis_value *  ext.y_axis_value) +  (ext.z_axis_value *  ext.z_axis_value));
   }
   
   function valueOrDefault(sensorValue){

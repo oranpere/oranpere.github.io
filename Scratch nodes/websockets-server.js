@@ -51,7 +51,7 @@ var webSocketModule = function (rgbLedsHandler, port) {
 			console.log(msg);
 		}
 		function sendMessage(msg, id) {
-			if (openSockets[id].readystate != 1)
+			if (openSockets[id].readyState != 1)
 				return;
 			console.log(msg);
 			openSockets[id].send(JSON.stringify(msg));
@@ -64,7 +64,7 @@ var webSocketModule = function (rgbLedsHandler, port) {
 var sendToAllScratchXInstances = function sendToAllScratchXInstances(msg) {
 	for (var i in openScratchXSockets) {
 		// console.log(msg);
-		if (openScratchXSockets[i].readystate != 1)
+		if (openScratchXSockets[i].readyState != 1)
 			return;
 		openScratchXSockets[i].send(JSON.stringify(msg));
 	}
