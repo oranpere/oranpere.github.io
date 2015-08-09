@@ -1,7 +1,7 @@
 (function (ext) {
   var socket;
   ext.ligt_level = [];
-  ext.button_status = [];
+  ext.button_state = [];
   ext.x_axis_value = [];
   ext.y_axis_value = [];
   ext.z_axis_value = [];
@@ -144,5 +144,5 @@
   }
 
   // Register the extension
-  ScratchExtensions.register('button statues', descriptor, ext);
+  ScratchExtensions.register('scratch nodes', descriptor, ext);
 })({});
