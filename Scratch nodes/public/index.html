@@ -27,7 +27,7 @@
     var io = new IO();
     var runtime = new Runtime();
     runtime.init();
-    var defaultServerIp = "52.6.39.58";
+    var defaultServerIp = "192.168.43.132";
     var socket;
     socketInit(defaultServerIp);
     
@@ -39,7 +39,7 @@
          }
       // On iOS, we need to activate the Web Audio API
       // with an empty sound play on the first touch event.
-     playDrum();
+     playDrum(0,1);
       if (!iosAudioActive) {
         var ibuffer = runtime.audioContext.createBuffer(1, 1, 22050);
         var isource = runtime.audioContext.createBufferSource();
