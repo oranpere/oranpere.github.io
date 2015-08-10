@@ -98,7 +98,11 @@ function setAccelemeratorValue(value){
   };
   
   function calculateAccelerationOnAllAxes(){
-    return  ((ext.x_axis_value *  ext.x_axis_value) +  (ext.y_axis_value *  ext.y_axis_value) +  (ext.z_axis_value *  ext.z_axis_value));
+    var x = ext.x_axis_value;
+    var y = ext.y_axis_value;
+    var z = ext.zx_axis_value;
+    var calc = x*x + y*y + z*z;
+    return calc;
   }
   
   function valueOrDefault(sensorValue){
