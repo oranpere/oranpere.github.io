@@ -94,7 +94,7 @@ function setAccelemeratorValue(value){
   };
   
   ext.get_total_acceleration = function (nodeId) {
-    return calculateAccelerationOnAllAxes();
+    return calculateAccelerationOnAllAxes(nodeId);
   };
   
   function calculateAccelerationOnAllAxes(nodeId){
