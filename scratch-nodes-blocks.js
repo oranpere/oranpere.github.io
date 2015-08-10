@@ -154,10 +154,11 @@ function setAccelemeratorValue(value){
   }
 
   function padWithZeros(color, numberOfZeros) {
-    while (color.length < numberOfZeros) {
-      color = '0' + color.toString();
+    var c = color.toString();
+    while (c.length < numberOfZeros) {
+      c = '0' + c;
     }
-    return color;
+    return c;
   }
 
   // Register the extension
