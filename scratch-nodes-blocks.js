@@ -155,7 +155,7 @@ function setAccelemeratorValue(value){
 
   function padWithZeros(color, numberOfZeros) {
     while (color.length < numberOfZeros) {
-      color = '0' + color;
+      color = '0' + color.toString();
     }
     return color;
   }
