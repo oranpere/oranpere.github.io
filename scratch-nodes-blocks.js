@@ -97,10 +97,10 @@ function setAccelemeratorValue(value){
     return calculateAccelerationOnAllAxes();
   };
   
-  function calculateAccelerationOnAllAxes(){
-    var x = ext.x_axis_value;
-    var y = ext.y_axis_value;
-    var z = ext.z_axis_value;
+  function calculateAccelerationOnAllAxes(nodeId){
+    var x = ext.x_axis_value[nodeId];
+    var y = ext.y_axis_value[nodeId];
+    var z = ext.z_axis_value[nodeId];
     var calc = x*x + y*y + z*z;
     return calc;
   }
