@@ -1,3 +1,20 @@
+// Copyright (C) 2015 Massachusetts Institute of Technology
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License version 2,
+// as published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+// Oran Peretz 2015
+
 #include "neopixel.h"
 
 const int btn1Pin = D0;
@@ -8,7 +25,7 @@ const int YAxisPin = A2;
 const int XAxisPin = A3;
 const int MicPin = A4;
 const char* server = "192.168.43.132";
-const char* id = "red";
+const char* id = "node2";
 const char* messageTemplate = "{\"id\":\"%s\",\"sensor\":\"%s\",\"value\":\"%d\"}";
 const int delayMilis = 3;
 bool isClicked = false;
@@ -112,7 +129,7 @@ void registerButtonClick(){
 }
 
 void udpSendLightIntensity(){
-  int analogValue = checkForChangesBeyondThreshold(20,lightResPin,0);
+  int analogValue = checkForChangesBeyondThreshold(50,lightResPin,0);
   if(analogValue != -1)
     sendUdpPacket("light", analogValue);
 }
